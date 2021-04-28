@@ -29,5 +29,5 @@
     <string name="image_back">Image Back</string>
     <string name="favorited">Favorited</string>
     <string name="unfavorited">Unfavorite</string>
-    <string name="hint_search">Search...</string>
+    <string name="hint_search">Search…</string>
 </resources>

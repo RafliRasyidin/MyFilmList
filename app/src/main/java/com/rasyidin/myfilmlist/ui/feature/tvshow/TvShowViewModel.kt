@@ -5,7 +5,7 @@ import androidx.lifecycle.asLiveData
 import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.ITvShowUseCase
 import kotlinx.coroutines.Dispatchers
 
-class TvShowViewModel(private val useCase: ITvShowUseCase): ViewModel() {
+class TvShowViewModel(useCase: ITvShowUseCase) : ViewModel() {
 
     val getAiringToday = useCase.getAiringToday().asLiveData(Dispatchers.IO)
 
