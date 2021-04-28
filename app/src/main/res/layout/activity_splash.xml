@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical"
     android:background="@color/colorPrimaryVariant"
@@ -13,7 +14,7 @@
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:contentDescription="@string/logo_splash_screen"
-        android:src="@drawable/ic_cinema_yellow" />
+        app:srcCompat="@drawable/ic_cinema_yellow" />
 
     <TextView
         android:id="@+id/tv_logo"

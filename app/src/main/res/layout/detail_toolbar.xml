@@ -24,7 +24,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:contentDescription="@string/image_back"
-            android:src="@drawable/ic_back" />
+            app:srcCompat="@drawable/ic_back" />
     </FrameLayout>
 
     <FrameLayout
@@ -45,7 +45,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:contentDescription="@string/image_favorite"
-            android:src="@drawable/ic_favorite_border" />
+            app:srcCompat="@drawable/ic_favorite_border" />
 
     </FrameLayout>
 </androidx.appcompat.widget.Toolbar>
