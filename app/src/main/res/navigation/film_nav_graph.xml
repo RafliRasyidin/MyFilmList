@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/film_nav_graph"
+    app:startDestination="@id/moviesFragment">
+    <fragment
+        android:id="@+id/moviesFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.home.MoviesFragment"
+        android:label="fragment_movies"
+        tools:layout="@layout/fragment_movies">
+        <action
+            android:id="@+id/action_moviesFragment_to_detailActivity"
+            app:destination="@id/detailActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_moviesFragment_to_searchMovieFragment"
+            app:destination="@id/searchMovieFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite">
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailActivity"
+            app:destination="@id/detailActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/tvShowFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.tvshow.TvShowFragment"
+        android:label="fragment_tv_show"
+        tools:layout="@layout/fragment_tv_show">
+        <action
+            android:id="@+id/action_tvShowFragment_to_detailActivity"
+            app:destination="@id/detailActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_tvShowFragment_to_searchTvShowFragment"
+            app:destination="@id/searchTvShowFragment" />
+    </fragment>
+
+    <activity
+        android:id="@+id/detailActivity"
+        android:name="com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity"
+        android:label="activity_detail"
+        tools:layout="@layout/activity_detail" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="tvShowId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="movieType"
+            app:argType="integer"
+            android:defaultValue="2" />
+        <argument
+            android:name="tvShowType"
+            app:argType="integer"
+            android:defaultValue="3" />
+    </activity>
+    <fragment
+        android:id="@+id/searchMovieFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.search.SearchMovieFragment"
+        android:label="fragment_search_movie"
+        tools:layout="@layout/fragment_search_movie" >
+        <action
+            android:id="@+id/action_searchMovieFragment_to_detailActivity"
+            app:destination="@id/detailActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_searchMovieFragment_to_moviesFragment"
+            app:destination="@id/moviesFragment"
+            app:popUpTo="@id/moviesFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+    <fragment
+        android:id="@+id/searchTvShowFragment"
+        android:name="com.rasyidin.myfilmlist.ui.feature.search.SearchTvShowFragment"
+        android:label="fragment_search_tv_show"
+        tools:layout="@layout/fragment_search_tv_show" >
+        <action
+            android:id="@+id/action_searchTvShowFragment_to_detailActivity"
+            app:destination="@id/detailActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_searchTvShowFragment_to_tvShowFragment"
+            app:destination="@id/tvShowFragment"
+            app:popUpTo="@id/tvShowFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+</navigation>

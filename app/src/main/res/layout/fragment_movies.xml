@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.feature.home.MoviesFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        style="@style/Theme.MyFilmList.AppBarOverlay"
+        android:background="@color/colorPrimaryVariant"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary">
+            
+            <include
+                android:id="@+id/dashboard_container"
+                layout="@layout/dashboard_container"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            
+    </com.google.android.material.appbar.AppBarLayout>
+        
+   <include
+       android:id="@+id/bot_sheet_container"
+       layout="@layout/bot_sheet_container"/>
+
+</FrameLayout>

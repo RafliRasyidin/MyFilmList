@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">MyFilmList</string>
+    <string name="poster_film">Poster Film</string>
+    <string name="image_favorite">Image Favorite</string>
+    <string name="movies">Movies</string>
+    <string name="tv_show">Tv Show</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="coming_soon1">Coming Soon!</string>
+    <string name="coming_soon">Coming Soon</string>
+    <string name="logo_splash_screen">Logo Splash Screen</string>
+    <string name="my_film_list">My Film List</string>
+    <string name="icon_search">Icon Search</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="airing_today">Airing Today</string>
+    <string name="on_the_air">On The Air</string>
+    <string name="movie_not_found">Movie not found!</string>
+    <string name="tv_show_not_found">TvShow not found!</string>
+    <string name="backdrop_movie">Backdrop Movie</string>
+    <string name="poster_movie">Poster Movie</string>
+    <string name="rating">0.0</string>
+    <string name="_0">0</string>
+    <string name="popularity">Popularity</string>
+    <string name="overview">Overview</string>
+    <string name="logo">Logo</string>
+    <string name="error">Something Wrong!</string>
+    <string name="image_back">Image Back</string>
+    <string name="favorited">Favorited</string>
+    <string name="unfavorited">Unfavorite</string>
+    <string name="hint_search">Search...</string>
+</resources>
