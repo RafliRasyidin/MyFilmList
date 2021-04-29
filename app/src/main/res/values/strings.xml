@@ -30,4 +30,7 @@
     <string name="favorited">Favorited</string>
     <string name="unfavorited">Unfavorite</string>
     <string name="hint_search">Search…</string>
+    <string name="transitionFabSearch">fab_search</string>
+    <string name="transitionSearchViewMovie">Search_View_Movie</string>
+    <string name="transitionSearchViewTvShow">Search_View_Tv_Show</string>
 </resources>

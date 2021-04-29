@@ -2,10 +2,15 @@ package com.rasyidin.myfilmlist.ui.feature.home
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rasyidin.myfilmlist.R
@@ -20,6 +25,7 @@ import com.rasyidin.myfilmlist.ui.base.BaseFragment
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_CODE
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_ID
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_TYPE
+import com.rasyidin.myfilmlist.ui.helper.Constants.ANIMATION_DURATION_TWO
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MoviesFragment : BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding::inflate) {
@@ -33,12 +39,23 @@ class MoviesFragment : BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding
 
     private lateinit var behavior: BottomSheetBehavior<*>
 
+    private lateinit var bounds: ChangeBounds
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             val navBar =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             navBar.visibility = View.VISIBLE
+
+            val animation = TransitionInflater.from(activity).inflateTransition(
+                android.R.transition.move
+            )
+            sharedElementEnterTransition = animation
+            sharedElementEnterTransition = enterTransition()
+
+            sharedElementReturnTransition = animation
+            sharedElementReturnTransition = returnTransition()
 
             setupBottomSheet()
 
@@ -55,10 +72,34 @@ class MoviesFragment : BaseFragment<FragmentMoviesBinding>(FragmentMoviesBinding
         }
     }
 
+    private fun enterTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.duration = ANIMATION_DURATION_TWO
+
+        return bounds
+    }
+
+    private fun returnTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.apply {
+            interpolator = DecelerateInterpolator()
+            duration = ANIMATION_DURATION_TWO
+        }
+
+        return bounds
+    }
+
     private fun navigateToSearchMovies() {
         binding.dashboardContainer.fabSearch.setOnClickListener {
+            val extras =
+                FragmentNavigatorExtras(
+                    binding.dashboardContainer.fabSearch to getString(R.string.transitionSearchViewMovie)
+                )
             findNavController().navigate(
-                MoviesFragmentDirections.actionMoviesFragmentToSearchMovieFragment()
+                R.id.action_moviesFragment_to_searchMovieFragment,
+                null,
+                null,
+                extras
             )
         }
     }

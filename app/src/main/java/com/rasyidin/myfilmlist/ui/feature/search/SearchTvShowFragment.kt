@@ -2,20 +2,26 @@ package com.rasyidin.myfilmlist.ui.feature.search
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rasyidin.myfilmlist.R
 import com.rasyidin.myfilmlist.core.data.Resource
-import com.rasyidin.myfilmlist.databinding.FragmentSearchMovieBinding
+import com.rasyidin.myfilmlist.databinding.FragmentSearchTvShowBinding
 import com.rasyidin.myfilmlist.ui.adapter.tv.SearchTvAdapter
 import com.rasyidin.myfilmlist.ui.base.BaseFragment
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_CODE
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_ID
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_TYPE
+import com.rasyidin.myfilmlist.ui.helper.Constants.ANIMATION_DURATION_TWO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
@@ -24,11 +30,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SearchTvShowFragment :
-    BaseFragment<FragmentSearchMovieBinding>(FragmentSearchMovieBinding::inflate) {
+    BaseFragment<FragmentSearchTvShowBinding>(FragmentSearchTvShowBinding::inflate) {
 
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var searchAdapter: SearchTvAdapter
+
+    private lateinit var bounds: ChangeBounds
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +44,15 @@ class SearchTvShowFragment :
             val navBar =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             navBar.visibility = View.GONE
+
+            val animation = TransitionInflater.from(activity).inflateTransition(
+                android.R.transition.move
+            )
+            sharedElementEnterTransition = animation
+            sharedElementEnterTransition = enterTransition()
+
+            sharedElementReturnTransition = animation
+            sharedElementReturnTransition = returnTransition()
 
             setupRecyclerView()
 
@@ -47,6 +64,23 @@ class SearchTvShowFragment :
 
             onBackClicked()
         }
+    }
+
+    private fun enterTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.duration = ANIMATION_DURATION_TWO
+
+        return bounds
+    }
+
+    private fun returnTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.apply {
+            interpolator = DecelerateInterpolator()
+            duration = ANIMATION_DURATION_TWO
+        }
+
+        return bounds
     }
 
     private fun onItemClicked() {
@@ -79,8 +113,14 @@ class SearchTvShowFragment :
 
     private fun onBackClicked() {
         binding.imgBack.setOnClickListener {
+            val extras = FragmentNavigatorExtras(
+                binding.searchView to getString(R.string.transitionFabSearch)
+            )
             findNavController().navigate(
-                SearchTvShowFragmentDirections.actionSearchTvShowFragmentToTvShowFragment()
+                R.id.action_searchTvShowFragment_to_tvShowFragment,
+                null,
+                null,
+                extras
             )
         }
     }

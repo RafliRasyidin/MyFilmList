@@ -2,10 +2,15 @@ package com.rasyidin.myfilmlist.ui.feature.tvshow
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rasyidin.myfilmlist.R
@@ -20,6 +25,7 @@ import com.rasyidin.myfilmlist.ui.base.BaseFragment
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_CODE
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_ID
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.TV_SHOW_TYPE
+import com.rasyidin.myfilmlist.ui.helper.Constants
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding::inflate) {
@@ -33,12 +39,24 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private lateinit var behavior: BottomSheetBehavior<*>
 
+    private lateinit var bounds: ChangeBounds
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             val navBar =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             navBar.visibility = View.VISIBLE
+
+            val animation = TransitionInflater.from(activity).inflateTransition(
+                android.R.transition.move
+            )
+
+            sharedElementEnterTransition = animation
+            sharedElementEnterTransition = enterTransition()
+
+            sharedElementReturnTransition = animation
+            sharedElementReturnTransition = returnTransition()
 
             setupBottomSheet()
 
@@ -55,10 +73,33 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
         }
     }
 
+    private fun enterTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.duration = Constants.ANIMATION_DURATION_TWO
+
+        return bounds
+    }
+
+    private fun returnTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.apply {
+            interpolator = DecelerateInterpolator()
+            duration = Constants.ANIMATION_DURATION_TWO
+        }
+
+        return bounds
+    }
+
     private fun navigateToSearchTvShow() {
         binding.dashboardContainer.fabSearch.setOnClickListener {
+            val extras = FragmentNavigatorExtras(
+                binding.dashboardContainer.fabSearch to getString(R.string.transitionSearchViewTvShow)
+            )
             findNavController().navigate(
-                TvShowFragmentDirections.actionTvShowFragmentToSearchTvShowFragment()
+                R.id.action_tvShowFragment_to_searchTvShowFragment,
+                null,
+                null,
+                extras
             )
         }
     }
@@ -209,7 +250,8 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private fun showTopRated(resource: Resource<List<TvShow>>) {
         if (resource.data.isNullOrEmpty()) {
-            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT)
+                .show()
         } else {
             resource.data.let {
                 topRatedAdapter.setData(it)
@@ -219,7 +261,8 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private fun showOnTheAir(resource: Resource<List<TvShow>>) {
         if (resource.data.isNullOrEmpty()) {
-            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT)
+                .show()
         } else {
             resource.data.let {
                 onTheAirAdapter.setData(it)
@@ -229,7 +272,8 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private fun showAiringToday(resource: Resource<List<TvShow>>) {
         if (resource.data.isNullOrEmpty()) {
-            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT)
+                .show()
         } else {
             resource.data.let {
                 airingTodayAdapter.setData(it)
@@ -239,7 +283,8 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private fun showPopular(resource: Resource<List<TvShow>>) {
         if (resource.data.isNullOrEmpty()) {
-            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.tv_show_not_found), Toast.LENGTH_SHORT)
+                .show()
         } else {
             resource.data.let {
                 popularAdapter.setData(it)

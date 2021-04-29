@@ -133,3 +133,7 @@ l
 <app/src/test/java/com/rasyidin/myfilmlist/utils/DataDummy.kt,4\4\44256ee73b17bfd8e7feb1cb3426275101466f20
 q
 Aapp/src/test/java/com/rasyidin/myfilmlist/utils/TestExtensions.kt,2\4\2483314362a2acc1c8e8b68f216779c56854e606
+[
++app/src/main/res/layout/activity_splash.xml,1\3\13b26b9b6631cddf289c5ab7c4e546a180da97d8
+Z
+*app/src/main/res/layout/detail_toolbar.xml,5\2\52ec5fa12f61e9172accffab6809472da2b4dae8

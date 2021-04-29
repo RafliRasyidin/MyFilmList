@@ -2,11 +2,16 @@ package com.rasyidin.myfilmlist.ui.feature.search
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.ChangeBounds
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rasyidin.myfilmlist.R
 import com.rasyidin.myfilmlist.core.data.Resource
@@ -16,6 +21,7 @@ import com.rasyidin.myfilmlist.ui.base.BaseFragment
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_CODE
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_ID
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_TYPE
+import com.rasyidin.myfilmlist.ui.helper.Constants.ANIMATION_DURATION_TWO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
@@ -31,12 +37,23 @@ class SearchMovieFragment :
 
     private lateinit var searchAdapter: SearchMovieAdapter
 
+    private lateinit var bounds: ChangeBounds
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             val navBar =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             navBar.visibility = View.GONE
+
+            val animation = TransitionInflater.from(activity).inflateTransition(
+                android.R.transition.move
+            )
+            sharedElementEnterTransition = animation
+            sharedElementEnterTransition = enterTransition()
+
+            sharedElementReturnTransition = animation
+            sharedElementReturnTransition = returnTransition()
 
             setupRecyclerView()
 
@@ -48,6 +65,23 @@ class SearchMovieFragment :
 
             onBackClicked()
         }
+    }
+
+    private fun enterTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.duration = ANIMATION_DURATION_TWO
+
+        return bounds
+    }
+
+    private fun returnTransition(): Transition {
+        bounds = ChangeBounds()
+        bounds.apply {
+            interpolator = DecelerateInterpolator()
+            duration = ANIMATION_DURATION_TWO
+        }
+
+        return bounds
     }
 
     private fun searchMovie() {
@@ -119,8 +153,14 @@ class SearchMovieFragment :
 
     private fun onBackClicked() {
         binding.imgBack.setOnClickListener {
+            val extras = FragmentNavigatorExtras(
+                binding.searchView to getString(R.string.transitionFabSearch)
+            )
             findNavController().navigate(
-                SearchMovieFragmentDirections.actionSearchMovieFragmentToMoviesFragment()
+                R.id.action_searchMovieFragment_to_moviesFragment,
+                null,
+                null,
+                extras
             )
 
         }
