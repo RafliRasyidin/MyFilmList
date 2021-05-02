@@ -2,6 +2,7 @@ package com.rasyidin.myfilmlist.core.domain.usecase.movies
 
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.domain.model.Movie
+import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.repository.IMoviesRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -29,5 +30,9 @@ class MoviesInteractors(private val moviesRepository: IMoviesRepository): IMovie
 
     override fun getDetail(movieId: Int): Flow<Resource<Movie>> {
         return moviesRepository.getDetail(movieId)
+    }
+
+    override fun getCreditMovie(movieId: Int): Flow<Resource<List<Person>>> {
+        return moviesRepository.getCreditsMovie(movieId)
     }
 }

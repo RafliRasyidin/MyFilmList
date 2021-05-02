@@ -10,6 +10,7 @@ data class TvItemsResponse(
     @field:SerializedName("first_air_date")
     val firstAirDate: String? = "",
 
+    @field:SerializedName("genres")
     val genres: List<Genre>,
 
     @field:SerializedName("id")

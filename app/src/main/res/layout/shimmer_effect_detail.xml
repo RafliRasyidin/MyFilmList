@@ -149,4 +149,38 @@
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@+id/text_overview" />
 
+    <TextView
+        android:id="@+id/text_cast"
+        style="@style/TextHeadline2"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorShade"
+        app:layout_constraintStart_toStartOf="@id/img_poster"
+        app:layout_constraintTop_toBottomOf="@id/img_poster" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_cast">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <include layout="@layout/item_cast_placeholder" />
+
+            <include layout="@layout/item_cast_placeholder" />
+
+            <include layout="@layout/item_cast_placeholder" />
+
+            <include layout="@layout/item_cast_placeholder" />
+
+            <include layout="@layout/item_cast_placeholder" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

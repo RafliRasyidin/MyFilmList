@@ -2,6 +2,7 @@ package com.rasyidin.myfilmlist.core.data.source.remote.network
 
 import com.rasyidin.myfilmlist.BuildConfig.API_KEY
 import com.rasyidin.myfilmlist.core.data.source.remote.response.BaseResponse
+import com.rasyidin.myfilmlist.core.data.source.remote.response.CreditsResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -45,5 +46,11 @@ interface MoviesApiService {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("page") page: Int = 1
     ): BaseResponse<MovieItemsResponse>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getCreditsMovie(
+        @Path("movie_id") id: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): CreditsResponse
 
 }

@@ -1,11 +1,14 @@
 package com.rasyidin.myfilmlist.ui.feature.detail
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.rasyidin.myfilmlist.BuildConfig.BASE_URL_IMAGE
@@ -14,17 +17,22 @@ import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 import com.rasyidin.myfilmlist.databinding.ActivityDetailBinding
+import com.rasyidin.myfilmlist.ui.adapter.CastAdapter
 import com.rasyidin.myfilmlist.ui.base.BaseActivity
 import com.rasyidin.myfilmlist.ui.helper.loadImage
-import com.rasyidin.myfilmlist.ui.helper.toYearFormat
 import com.rasyidin.myfilmlist.ui.helper.toHoursAndMin
 import com.rasyidin.myfilmlist.ui.helper.toSuffixCharsKMBPTE
+import com.rasyidin.myfilmlist.ui.helper.toYearFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailActivity : BaseActivity<ActivityDetailBinding>() {
 
     private val viewModel: DetailViewModel by viewModel()
     private val args: DetailActivityArgs by navArgs()
+
+    private lateinit var castAdapter: CastAdapter
+
+    private lateinit var behavior: BottomSheetBehavior<*>
 
     override fun getViewBinding() = ActivityDetailBinding.inflate(layoutInflater)
 
@@ -38,6 +46,10 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
         val isMovieType: Boolean = movieType == MOVIE_CODE
         val isTvShowType: Boolean = tvShowType == TV_SHOW_CODE
 
+        setupRecyclerView()
+
+        setupBottomSheet()
+
         if (isMovieType) {
             observeDetailMovie()
         } else if (isTvShowType) {
@@ -47,27 +59,58 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
         onBackClicked()
 
         onFavoriteClicked()
+
+    }
+
+    private fun setupRecyclerView() = binding.detailContainer.rvCast.apply {
+        castAdapter = CastAdapter()
+        adapter = castAdapter
+        layoutManager = LinearLayoutManager(
+            this@DetailActivity,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        setHasFixedSize(true)
     }
 
     private fun observeDetailMovie() {
         viewModel.getDetailMovie(args.movieId).observe(this) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    binding.loading.visibility = View.GONE
+                    binding.detailContainer.loading.visibility = View.GONE
                     resource.data?.let {
                         showDetailMovie(it)
                     }
                 }
                 is Resource.Loading -> {
-                    binding.loading.visibility = View.VISIBLE
+                    binding.detailContainer.loading.visibility = View.VISIBLE
                 }
                 is Resource.Error -> {
-                    binding.loading.visibility = View.GONE
+                    binding.detailContainer.loading.visibility = View.GONE
                     Toast.makeText(
                         this,
                         getString(R.string.error),
                         Toast.LENGTH_SHORT
                     ).show()
+                }
+            }
+        }
+        viewModel.getCreditsMovie(args.movieId).observe(this) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    binding.detailContainer.loading.visibility = View.GONE
+                    castAdapter.setData(resource.data)
+                }
+                is Resource.Error -> {
+                    binding.detailContainer.loading.visibility = View.GONE
+                    Toast.makeText(
+                        this,
+                        getString(R.string.error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is Resource.Loading -> {
+                    binding.detailContainer.loading.visibility = View.VISIBLE
                 }
             }
         }
@@ -77,21 +120,40 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
         viewModel.getDetailTvShow(args.tvShowId).observe(this) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    binding.loading.visibility = View.GONE
+                    binding.detailContainer.loading.visibility = View.GONE
                     resource.data?.let {
                         showDetailTvShow(it)
                     }
                 }
                 is Resource.Loading -> {
-                    binding.loading.visibility = View.VISIBLE
+                    binding.detailContainer.loading.visibility = View.VISIBLE
                 }
                 is Resource.Error -> {
-                    binding.loading.visibility = View.GONE
+                    binding.detailContainer.loading.visibility = View.GONE
                     Toast.makeText(
                         this,
                         getString(R.string.error),
                         Toast.LENGTH_SHORT
                     ).show()
+                }
+            }
+        }
+        viewModel.getCreditsTvShow(args.tvShowId).observe(this) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    binding.detailContainer.loading.visibility = View.GONE
+                    castAdapter.setData(resource.data)
+                }
+                is Resource.Error -> {
+                    binding.detailContainer.loading.visibility = View.GONE
+                    Toast.makeText(
+                        this,
+                        getString(R.string.error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is Resource.Loading -> {
+                    binding.detailContainer.loading.visibility = View.VISIBLE
                 }
             }
         }
@@ -118,6 +180,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
                 tvReleaseDate.text = tvShow.firstAirDate?.toYearFormat()
                 tvTitle.text = tvShow.name
                 tvOverview.text = tvShow.overview
+                tvOverview.movementMethod = ScrollingMovementMethod()
 
                 imgPoster.loadImage(
                     BASE_URL_IMAGE + tvShow.posterPath,
@@ -151,6 +214,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
                 tvRuntime.text = movie.runtime.toHoursAndMin()
                 tvTitle.text = movie.title
                 tvOverview.text = movie.overview
+                tvOverview.movementMethod = ScrollingMovementMethod()
 
                 imgPoster.loadImage(
                     BASE_URL_IMAGE + movie.posterPath,
@@ -197,6 +261,11 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
                 )
             }
         }
+    }
+
+    private fun setupBottomSheet() {
+        behavior = BottomSheetBehavior.from(binding.detailContainer.bottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     companion object {

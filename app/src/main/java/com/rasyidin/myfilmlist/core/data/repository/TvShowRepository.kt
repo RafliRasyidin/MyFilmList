@@ -3,9 +3,11 @@ package com.rasyidin.myfilmlist.core.data.repository
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.remote.TvShowRemoteDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
+import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 import com.rasyidin.myfilmlist.core.domain.repository.ITvShowRepository
 import com.rasyidin.myfilmlist.core.utils.toListTvShow
+import com.rasyidin.myfilmlist.core.utils.toPerson
 import com.rasyidin.myfilmlist.core.utils.toTvShow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -92,6 +94,19 @@ class TvShowRepository(private val remoteDataSource: TvShowRemoteDataSource) : I
                 }
             }
         } as Flow<Resource<TvShow>>
+    }
+
+    override fun getCreditsTvShow(tvId: Int): Flow<Resource<List<Person>>> {
+        return flow {
+            emit(Resource.Loading())
+            remoteDataSource.getCreditsTvShow(tvId).collect { response ->
+                when (response) {
+                    is ApiResponse.Success -> emit(Resource.Success(response.data.toPerson()))
+                    is ApiResponse.Empty -> emit(Resource.Success<List<Person>>(emptyList()))
+                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+                }
+            }
+        } as Flow<Resource<List<Person>>>
     }
 
 }

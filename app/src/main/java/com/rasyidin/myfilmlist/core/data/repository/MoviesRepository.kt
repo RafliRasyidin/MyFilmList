@@ -4,9 +4,11 @@ import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.remote.MoviesRemoteDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.domain.model.Movie
+import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.repository.IMoviesRepository
 import com.rasyidin.myfilmlist.core.utils.toListMovie
 import com.rasyidin.myfilmlist.core.utils.toMovie
+import com.rasyidin.myfilmlist.core.utils.toPerson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -92,6 +94,19 @@ class MoviesRepository(private val remoteDataSource: MoviesRemoteDataSource) : I
                 }
             }
         } as Flow<Resource<Movie>>
+    }
+
+    override fun getCreditsMovie(movieId: Int): Flow<Resource<List<Person>>> {
+        return flow {
+            emit(Resource.Loading())
+            remoteDataSource.getCreditsMovie(movieId).collect { response ->
+                when (response) {
+                    is ApiResponse.Success -> emit(Resource.Success(response.data.toPerson()))
+                    is ApiResponse.Empty -> emit(Resource.Success<List<Person>>(null))
+                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+                }
+            }
+        } as Flow<Resource<List<Person>>>
     }
 
 }

@@ -1,6 +1,7 @@
 package com.rasyidin.myfilmlist.core.domain.usecase.tvshow
 
 import com.rasyidin.myfilmlist.core.data.Resource
+import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 import com.rasyidin.myfilmlist.core.domain.repository.ITvShowRepository
 import kotlinx.coroutines.flow.Flow
@@ -29,5 +30,9 @@ class TvShowInteractors(private val tvShowRepository: ITvShowRepository): ITvSho
 
     override fun getDetail(tvId: Int): Flow<Resource<TvShow>> {
         return tvShowRepository.getDetail(tvId)
+    }
+
+    override fun getCreditsTvShow(tvId: Int): Flow<Resource<List<Person>>> {
+        return tvShowRepository.getCreditsTvShow(tvId)
     }
 }

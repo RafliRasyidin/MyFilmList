@@ -2,10 +2,12 @@ package com.rasyidin.myfilmlist.core.data.source.remote
 
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.network.MoviesApiService
+import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import kotlinx.coroutines.flow.Flow
 
-class MoviesRemoteDataSource(private val apiService: MoviesApiService): ResponseHandle<MovieItemsResponse>() {
+class MoviesRemoteDataSource(private val apiService: MoviesApiService) :
+    ResponseHandle<MovieItemsResponse>() {
 
     suspend fun getNowPlaying(): Flow<ApiResponse<List<MovieItemsResponse>>> {
         response = apiService.getNowPlaying()
@@ -36,5 +38,10 @@ class MoviesRemoteDataSource(private val apiService: MoviesApiService): Response
     suspend fun searchMovie(query: String?): Flow<ApiResponse<List<MovieItemsResponse>>> {
         response = apiService.searchMovies(query)
         return responseHandle(response)
+    }
+
+    suspend fun getCreditsMovie(movieId: Int): Flow<ApiResponse<List<CastResponse>>> {
+        creditsResponse = apiService.getCreditsMovie(movieId)
+        return creditsResponseHandle(creditsResponse)
     }
 }

@@ -2,6 +2,7 @@ package com.rasyidin.myfilmlist.core.data.source.remote
 
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.network.TvApiService
+import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -36,5 +37,10 @@ class TvShowRemoteDataSource(private val apiService: TvApiService) : ResponseHan
     suspend fun searchTvShow(query: String?): Flow<ApiResponse<List<TvItemsResponse>>> {
         response = apiService.searchTvShow(query)
         return responseHandle(response)
+    }
+
+    suspend fun getCreditsTvShow(tvId: Int): Flow<ApiResponse<List<CastResponse>>> {
+        creditsResponse = apiService.getCreditsTvShow(tvId)
+        return creditsResponseHandle(creditsResponse)
     }
 }

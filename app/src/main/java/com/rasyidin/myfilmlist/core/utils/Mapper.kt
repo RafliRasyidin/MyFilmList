@@ -1,8 +1,10 @@
 package com.rasyidin.myfilmlist.core.utils
 
+import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
 import com.rasyidin.myfilmlist.core.domain.model.Movie
+import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 
 fun MovieItemsResponse.toMovie() = Movie(
@@ -71,4 +73,20 @@ fun List<TvItemsResponse>.toListTvShow(): List<TvShow> {
         listTvShow.add(tvShow)
     }
     return listTvShow
+}
+
+fun List<CastResponse>.toPerson(): List<Person> {
+    val listPerson = ArrayList<Person>()
+    this.map {
+        val person = Person(
+            alsoKnownAs = emptyList(),
+            id = it.id,
+            name = it.name,
+            character = it.character,
+            profilePath = it.profilePath,
+            popularity = it.popularity
+        )
+        listPerson.add(person)
+    }
+    return listPerson
 }

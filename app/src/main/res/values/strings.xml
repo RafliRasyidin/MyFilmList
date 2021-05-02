@@ -33,4 +33,6 @@
     <string name="transitionFabSearch">fab_search</string>
     <string name="transitionSearchViewMovie">Search_View_Movie</string>
     <string name="transitionSearchViewTvShow">Search_View_Tv_Show</string>
+    <string name="cast">Cast</string>
+    <string name="image_person">Image Person</string>
 </resources>
