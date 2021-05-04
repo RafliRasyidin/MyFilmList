@@ -1,9 +1,63 @@
 package com.rasyidin.myfilmlist.utils
 
+import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
+import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 
 object DataDummy {
+
+    fun generateDummySearchMovies(): List<Movie> {
+        val movies = ArrayList<Movie>()
+
+        movies.add(
+            Movie(
+                "/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
+                "2019-04-24",
+                emptyList(),
+                299534,
+                "Avengers: Endgame",
+                "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store.",
+                293.211,
+                "/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
+                18019,
+                0,
+                8.3
+            )
+        )
+        movies.add(
+            Movie(
+                "/lmZFxXgJE3vgrciwuDib0N8CfQo.jpg",
+                "2018-04-25",
+                emptyList(),
+                299536,
+                "Avengers: Infinity War",
+                "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+                359.008,
+                "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+                21688,
+                0,
+                8.3
+            )
+        )
+        movies.add(
+            Movie(
+                "/nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg",
+                "2012-04-25",
+                emptyList(),
+                24428,
+                "The Avengers",
+                "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
+                29.737342,
+                "/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
+                24597,
+                0,
+                7.7
+            )
+        )
+
+        return movies
+    }
 
     fun generateDummyDetailMovie(): Movie {
         return Movie(
@@ -136,4 +190,72 @@ object DataDummy {
 
         return listTvShow
     }
+
+    fun generateDummyCredits(): List<CastResponse> {
+        val cast = ArrayList<CastResponse>()
+        cast.add(
+            CastResponse(
+                character = "The Narrator",
+                id = 819,
+                name = "Edward Norton",
+                popularity = 7.861,
+                profilePath = "/5XBzD5WuTyVQZeS4VI25z2moMeY.jpg"
+            )
+        )
+        cast.add(
+            CastResponse(
+                character = "Tyler Durden",
+                id = 287,
+                name = "Brad Pitt",
+                popularity = 20.431,
+                profilePath = "/cckcYc2v0yh1tc9QjRelptcOBko.jpg"
+            )
+        )
+        cast.add(
+            CastResponse(
+                character = "Marla Singer",
+                id = 1283,
+                name = "Helena Bonham Carter",
+                popularity = 14.399,
+                profilePath = "/mW1NolxQmPE16Zg6zuWyZlFgOwL.jpg"
+            )
+        )
+
+        return cast
+    }
 }
+
+fun List<Movie>.toListMovieItemResponse(): List<MovieItemsResponse> {
+    val movies = ArrayList<MovieItemsResponse>()
+    this.map {
+        val movie = MovieItemsResponse(
+            backdropPath = it.backdropPath,
+            releaseDate = it.releaseDate,
+            genres = emptyList(),
+            id = it.id,
+            title = it.title,
+            overview = it.overview,
+            popularity = it.popularity,
+            posterPath = it.posterPath,
+            voteCount = it.voteCount,
+            voteAverage = it.voteAverage,
+            runtime = it.runtime
+        )
+        movies.add(movie)
+    }
+    return movies
+}
+
+fun Movie.toMovieItemsResponse() = MovieItemsResponse(
+    this.backdropPath,
+    this.genres,
+    this.id,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    this.title,
+    this.voteCount,
+    this.runtime,
+    this.voteAverage
+)

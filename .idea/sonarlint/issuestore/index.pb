@@ -153,3 +153,13 @@ u
 Eapp/src/main/java/com/rasyidin/myfilmlist/core/domain/model/Person.kt,f\c\fc82c7b812b563084ade6eba90c0446493611351
 s
 Capp/src/main/java/com/rasyidin/myfilmlist/ui/adapter/CastAdapter.kt,c\3\c32629646a248e1a55a955ad8ea0fe0eb009e0ed
+]
+-app/src/main/res/drawable/ic_star_outline.xml,b\4\b4634a0b1e646be9a4c601a6381e7e7992f071b0
+U
+%app/src/main/res/layout/item_cast.xml,8\c\8cbabc065945c5f0e1a5b1c22c638d770e2bb4c8
+a
+1app/src/main/res/layout/item_cast_placeholder.xml,4\1\41fdefab50dbcbdd4723274fc8a966a8f4464aac
+†
+Vapp/src/test/java/com/rasyidin/myfilmlist/core/data/repository/FakeMoviesRepository.kt,6\9\699b54462810118ff283c9d8b1a4e16010b34daf
+†
+Vapp/src/test/java/com/rasyidin/myfilmlist/core/data/repository/MoviesRepositoryTest.kt,d\4\d440a3234fc6c9fb6603d6ff9f237fccf0c54708
