@@ -2,6 +2,7 @@ package com.rasyidin.myfilmlist.utils
 
 import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
+import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
 import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 
@@ -57,6 +58,54 @@ object DataDummy {
         )
 
         return movies
+    }
+
+    fun generateDummySearchTvShow(): List<TvShow> {
+        val listTvShow = ArrayList<TvShow>()
+
+        listTvShow.add(
+            TvShow(
+                "/3XlKckxPEa4lg5w4vHnyE35PUyI.jpg",
+                "2017-04-05",
+                emptyList(),
+                70881,
+                "Boruto: Naruto Next Generations",
+                "The Hidden Leaf Village has entered an era of peace and modernity. Tall buildings line the streets, giant screens flash with images, and the Thunder Rail runs through the village, connecting each district together. Though it's still a ninja village, the number of civilians has increased and the life of the shinobi is beginning to change. Boruto Uzumaki, son of Seventh Hokage Naruto Uzumaki, has enrolled in the Ninja Academy to learn the ways of the ninja. The other students are ready to dismiss him as \"just the son of the Hokage,” but Boruto’s heart and character blow all their assumptions away. As a series of mysterious events begins to unfold, it’s up to Boruto and his new friends to handle them. Like a gale-force wind, Boruto makes his own way into everyone's hearts; his story is about to begin!!",
+                36.22,
+                "/e0B6i48kxdRkMcK4tR4YNfXGWOc.jpg",
+                1521,
+                8.0
+            )
+        )
+        listTvShow.add(
+            TvShow(
+                "/hAE4t1A9Mhrc7ZzbbV06yaYGyQV.jpg",
+                "2012-04-03",
+                emptyList(),
+                43168,
+                "NARUTO Spin-Off: Rock Lee & His Ninja Pals",
+                "Welcome to the Hidden Leaf Village. The village where Uzumaki Naruto, star of the TV show \"Naruto\" makes his home. Every day, countless powerful ninjas carry out missions and train to hone their skills. Our main character is one of these powerful ninjas...but it's not Naruto! It's the ninja who can't use ninjutsu, Rock Lee!",
+                57.873,
+                "/1ZuRLgQGPG6K5fcORJQpsmIurZv.jpg",
+                15,
+                7.1
+            )
+        )
+        listTvShow.add(
+            TvShow(
+                "/oycArCLGgtWyUz5aho7ojFZkgjN.jpg",
+                "2002-10-03",
+                emptyList(),
+                46260,
+                "Naruto",
+                "In another world, ninja are the ultimate power, and in the Village Hidden in the Leaves live the stealthiest ninja in the land. Twelve years earlier, the fearsome Nine-Tailed Fox terrorized the village and claimed many lives before it was subdued and its spirit sealed within the body of a baby boy. That boy, Naruto Uzumaki, has grown up to become a ninja-in-training who's more interested in pranks than in studying ninjutsu.. but Naruto is determined to become the greatest ninja ever!",
+                347.323,
+                "/vauCEnR7CiyBDzRCeElKkCaXIYu.jpg",
+                3513,
+                8.4
+            )
+        )
+        return listTvShow
     }
 
     fun generateDummyDetailMovie(): Movie {
@@ -246,6 +295,26 @@ fun List<Movie>.toListMovieItemResponse(): List<MovieItemsResponse> {
     return movies
 }
 
+fun List<TvShow>.toListTvItemsResponse(): List<TvItemsResponse> {
+    val listTvShow = ArrayList<TvItemsResponse>()
+    this.map {
+        val tvShow = TvItemsResponse(
+            backdropPath = it.backdropPath,
+            firstAirDate = it.firstAirDate,
+            genres = emptyList(),
+            id = it.id,
+            name = it.name,
+            overview = it.overview,
+            popularity = it.popularity,
+            posterPath = it.posterPath,
+            voteCount = it.voteCount,
+            voteAverage = it.voteAverage
+        )
+        listTvShow.add(tvShow)
+    }
+    return listTvShow
+}
+
 fun Movie.toMovieItemsResponse() = MovieItemsResponse(
     this.backdropPath,
     this.genres,
@@ -257,5 +326,18 @@ fun Movie.toMovieItemsResponse() = MovieItemsResponse(
     this.title,
     this.voteCount,
     this.runtime,
+    this.voteAverage
+)
+
+fun TvShow.toTvItemsResponse() = TvItemsResponse(
+    this.backdropPath,
+    this.firstAirDate,
+    this.genres,
+    this.id,
+    this.name,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.voteCount,
     this.voteAverage
 )
