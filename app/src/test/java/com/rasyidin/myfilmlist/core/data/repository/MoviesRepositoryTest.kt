@@ -164,6 +164,7 @@ class MoviesRepositoryTest {
             moviesRepository.getDetail(movieId).collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
+                    assertEquals(movieId, resource.data?.id)
                 }
             }
         }
