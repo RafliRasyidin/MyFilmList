@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_title_shimmer"
         android:layout_width="156dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -17,72 +17,72 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_release_date"
+        android:id="@+id/tv_release_date_shimmer"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@color/colorShade"
-        app:layout_constraintEnd_toStartOf="@+id/view"
+        app:layout_constraintEnd_toStartOf="@+id/view_shimmer"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title_shimmer" />
 
     <TextView
-        android:id="@+id/tv_runtime"
+        android:id="@+id/tv_runtime_shimmer"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@color/colorShade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+        app:layout_constraintStart_toEndOf="@+id/view_shimmer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_shimmer" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/view_shimmer"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/shp_round_accent"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_release_date"
-        app:layout_constraintEnd_toStartOf="@+id/tv_runtime"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_release_date_shimmer"
+        app:layout_constraintEnd_toStartOf="@+id/tv_runtime_shimmer"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_release_date"
-        app:layout_constraintTop_toTopOf="@+id/tv_release_date" />
+        app:layout_constraintStart_toEndOf="@+id/tv_release_date_shimmer"
+        app:layout_constraintTop_toTopOf="@+id/tv_release_date_shimmer" />
 
     <TextView
-        android:id="@+id/tv_rating"
+        android:id="@+id/tv_rating_shimmer"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@color/colorShade"
-        app:layout_constraintEnd_toStartOf="@+id/tv_popular"
+        app:layout_constraintEnd_toStartOf="@+id/tv_popular_shimmer"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_release_date" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_release_date_shimmer" />
 
     <TextView
-        android:id="@+id/tv_popular"
+        android:id="@+id/tv_popular_shimmer"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@color/colorShade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_rating"
-        app:layout_constraintTop_toBottomOf="@+id/tv_runtime" />
+        app:layout_constraintStart_toEndOf="@+id/tv_rating_shimmer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_runtime_shimmer" />
 
     <TextView
-        android:id="@+id/tv_rating_count"
+        android:id="@+id/tv_rating_count_shimmer"
         android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@color/colorShade"
-        app:layout_constraintEnd_toEndOf="@+id/tv_rating"
-        app:layout_constraintStart_toStartOf="@+id/tv_rating"
-        app:layout_constraintTop_toBottomOf="@+id/tv_rating" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_rating_shimmer"
+        app:layout_constraintStart_toStartOf="@+id/tv_rating_shimmer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_rating_shimmer" />
 
     <TextView
         android:id="@+id/text_popular"
@@ -90,12 +90,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@color/colorShade"
-        app:layout_constraintEnd_toEndOf="@+id/tv_popular"
-        app:layout_constraintStart_toStartOf="@+id/tv_popular"
-        app:layout_constraintTop_toBottomOf="@+id/tv_popular" />
+        app:layout_constraintEnd_toEndOf="@+id/tv_popular_shimmer"
+        app:layout_constraintStart_toStartOf="@+id/tv_popular_shimmer"
+        app:layout_constraintTop_toBottomOf="@+id/tv_popular_shimmer" />
 
     <LinearLayout
-        android:id="@+id/chip_container"
+        android:id="@+id/chip_container_shimmer"
         android:layout_width="match_parent"
         android:layout_height="16dp"
         android:layout_marginStart="16dp"
@@ -106,7 +106,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_rating_count">
+        app:layout_constraintTop_toBottomOf="@id/tv_rating_count_shimmer">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chip_group"
@@ -123,11 +123,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:background="@color/colorShade"
-        app:layout_constraintStart_toEndOf="@+id/img_poster"
-        app:layout_constraintTop_toTopOf="@+id/img_poster" />
+        app:layout_constraintStart_toEndOf="@+id/img_poster_shimmer"
+        app:layout_constraintTop_toTopOf="@+id/img_poster_shimmer" />
 
     <ImageView
-        android:id="@+id/img_poster"
+        android:id="@+id/img_poster_shimmer"
         android:layout_width="136dp"
         android:layout_height="184dp"
         android:layout_marginStart="16dp"
@@ -135,10 +135,10 @@
         android:background="@color/colorShade"
         android:contentDescription="@string/poster_movie"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chip_container" />
+        app:layout_constraintTop_toBottomOf="@+id/chip_container_shimmer" />
 
     <TextView
-        android:id="@+id/tv_overview"
+        android:id="@+id/tv_overview_shimmer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -146,7 +146,7 @@
         android:layout_marginEnd="16dp"
         android:background="@color/colorShade"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_poster"
+        app:layout_constraintStart_toEndOf="@+id/img_poster_shimmer"
         app:layout_constraintTop_toBottomOf="@+id/text_overview" />
 
     <TextView
@@ -156,8 +156,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@color/colorShade"
-        app:layout_constraintStart_toStartOf="@id/img_poster"
-        app:layout_constraintTop_toBottomOf="@id/img_poster" />
+        app:layout_constraintStart_toStartOf="@id/img_poster_shimmer"
+        app:layout_constraintTop_toBottomOf="@id/img_poster_shimmer" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

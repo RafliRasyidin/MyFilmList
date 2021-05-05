@@ -54,6 +54,7 @@ class MainActivityTest {
         onView(withId(R.id.tv_runtime)).check(matches(isDisplayed()))
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.img_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_cast)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -80,5 +81,6 @@ class MainActivityTest {
         onView(withId(R.id.tv_release_date)).check(matches(isDisplayed()))
         onView(withId(R.id.img_poster)).check(matches(isDisplayed()))
         onView(withId(R.id.img_backdrop)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_cast)).check(matches(isDisplayed()))
     }
 }
