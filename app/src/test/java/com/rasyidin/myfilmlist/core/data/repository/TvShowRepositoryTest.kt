@@ -2,13 +2,13 @@ package com.rasyidin.myfilmlist.core.data.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.rasyidin.myfilmlist.core.data.Resource
-import com.rasyidin.myfilmlist.core.data.source.remote.MoviesRemoteDataSource
+import com.rasyidin.myfilmlist.core.data.source.remote.TvShowRemoteDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.BaseResponse
-import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
+import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
 import com.rasyidin.myfilmlist.utils.DataDummy
-import com.rasyidin.myfilmlist.utils.toListMovieItemResponse
-import com.rasyidin.myfilmlist.utils.toMovieItemsResponse
+import com.rasyidin.myfilmlist.utils.toListTvItemsResponse
+import com.rasyidin.myfilmlist.utils.toTvItemsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -19,60 +19,55 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mockito.mock
 
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
-class MoviesRepositoryTest {
+class TvShowRepositoryTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private val remote = Mockito.mock(MoviesRemoteDataSource::class.java)
+    private val remote = mock(TvShowRemoteDataSource::class.java)
 
-    private lateinit var moviesRepository: MoviesRepository
+    private lateinit var repository: TvShowRepository
 
-    private var movieId: Int = 0
+    private var tvId: Int = 0
 
-    private lateinit var dummyMovies: BaseResponse<MovieItemsResponse>
+    private lateinit var dummyTvShow: BaseResponse<TvItemsResponse>
 
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
     fun setup() {
-        dummyMovies = BaseResponse(
-            data = DataDummy.generateDummyMovies().toListMovieItemResponse(),
-            page = 1
+        dummyTvShow = BaseResponse(
+            1,
+            DataDummy.generateDummyTvShow().toListTvItemsResponse()
         )
-        movieId = DataDummy.generateDummyDetailMovie().id
-        moviesRepository = MoviesRepository(remote)
+        tvId = DataDummy.generateDummyDetailTv().id
+        repository = TvShowRepository(remote)
     }
 
     @Test
-    fun getNowPlaying() {
+    fun getAiringToday() {
         testScope.launch {
-            `when`(remote.getNowPlaying()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getNowPlaying().collect { resource ->
+            `when`(remote.getAiringToday()).thenReturn(responseHandle(dummyTvShow))
+            repository.getAiringToday().collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
             }
         }
-
     }
 
-
     @Test
-    fun getPopular() {
+    fun getOnTheAir() {
         testScope.launch {
-            `when`(remote.getPopular()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getPopular().collect { resource ->
+            `when`(remote.getOnTheAir()).thenReturn(responseHandle(dummyTvShow))
+            repository.getOnTheAir().collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
@@ -83,8 +78,8 @@ class MoviesRepositoryTest {
     @Test
     fun getTopRated() {
         testScope.launch {
-            `when`(remote.getTopRated()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getTopRated().collect { resource ->
+            `when`(remote.getTopRated()).thenReturn(responseHandle(dummyTvShow))
+            repository.getTopRated().collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
@@ -93,10 +88,10 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun getUpComing() {
+    fun getPopular() {
         testScope.launch {
-            `when`(remote.getUpcoming()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getUpComing().collect { resource ->
+            `when`(remote.getPopular()).thenReturn(responseHandle(dummyTvShow))
+            repository.getPopular().collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
@@ -105,15 +100,16 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun searchMovies() {
-        val query = "Avengers"
-        val dummySearchMovies = BaseResponse(
-            data = DataDummy.generateDummySearchMovies().toListMovieItemResponse(),
-            page = 1
+    fun searchTvShow() {
+        val query = "Naruto"
+        val dummySearchTvShow = BaseResponse(
+            1,
+            DataDummy.generateDummySearchTvShow().toListTvItemsResponse()
         )
+
         testScope.launch {
-            `when`(remote.searchMovie(query)).thenReturn(responseHandle(dummySearchMovies))
-            moviesRepository.searchMovies(query).collect { resource ->
+            `when`(remote.searchTvShow(query)).thenReturn(responseHandle(dummySearchTvShow))
+            repository.searchTvShow(query).collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
@@ -124,13 +120,13 @@ class MoviesRepositoryTest {
     @Test
     fun `Search Result is Not Found`() {
         val query = "kajwhdkawhd"
-        val dummySearchMovies = BaseResponse(
+        val dummySearchTvShow = BaseResponse(
             1,
-            emptyList<MovieItemsResponse>()
+            emptyList<TvItemsResponse>()
         )
         testScope.launch {
-            `when`(remote.searchMovie(query)).thenReturn(responseHandle(dummySearchMovies))
-            moviesRepository.searchMovies(query).collect { resource ->
+            `when`(remote.searchTvShow(query)).thenReturn(responseHandle(dummySearchTvShow))
+            repository.searchTvShow(query).collect { resource ->
                 if (resource is Resource.Success) {
                     assertNull(resource.data)
                 }
@@ -140,12 +136,12 @@ class MoviesRepositoryTest {
 
     @Test
     fun `Error Response`() {
-        val movie = flow {
+        val tvShow = flow {
             emit(ApiResponse.Error("Something Wrong!"))
         }
         testScope.launch {
-            `when`(remote.getUpcoming()).thenReturn(movie)
-            moviesRepository.getUpComing().collect { resource ->
+            `when`(remote.getPopular()).thenReturn(tvShow)
+            repository.getPopular().collect { resource ->
                 if (resource is Resource.Error) {
                     assertEquals("Something Wrong!", resource.message)
                     assertNull(resource.data)
@@ -156,28 +152,28 @@ class MoviesRepositoryTest {
 
     @Test
     fun getDetail() {
-        val detail = flow {
-            emit(ApiResponse.Success(DataDummy.generateDummyDetailMovie().toMovieItemsResponse()))
+        val dummyDetailTvShow = flow {
+            emit(ApiResponse.Success(DataDummy.generateDummyDetailTv().toTvItemsResponse()))
         }
         testScope.launch {
-            `when`(remote.getDetail(movieId)).thenReturn(detail)
-            moviesRepository.getDetail(movieId).collect { resource ->
+            `when`(remote.getDetail(tvId)).thenReturn(dummyDetailTvShow)
+            repository.getDetail(tvId).collect { resource ->
                 if (resource is Resource.Success) {
+                    assertEquals(tvId, resource.data?.id)
                     assertNotNull(resource.data)
-                    assertEquals(movieId, resource.data?.id)
                 }
             }
         }
     }
 
     @Test
-    fun getCreditsMovie() {
+    fun getCreditsTvShow() {
         val credits = flow {
             emit(ApiResponse.Success(DataDummy.generateDummyCredits()))
         }
         testScope.launch {
-            `when`(remote.getCreditsMovie(movieId)).thenReturn(credits)
-            moviesRepository.getCreditsMovie(movieId).collect { resource ->
+            `when`(remote.getCreditsTvShow(tvId)).thenReturn(credits)
+            repository.getCreditsTvShow(tvId).collect { resource ->
                 if (resource is Resource.Success) {
                     assertNotNull(resource.data)
                 }
@@ -185,7 +181,7 @@ class MoviesRepositoryTest {
         }
     }
 
-    private fun responseHandle(response: BaseResponse<MovieItemsResponse>): Flow<ApiResponse<List<MovieItemsResponse>>> {
+    private fun responseHandle(response: BaseResponse<TvItemsResponse>): Flow<ApiResponse<List<TvItemsResponse>>> {
         return flow {
             val data = response.data
             if (data.isNotEmpty()) {
