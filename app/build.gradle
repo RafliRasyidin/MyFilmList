@@ -49,14 +49,14 @@ android {
 ext {
     //UI
     shimmerVersion = '0.5.0'
-    lottieVersion = '3.6.1'
+    lottieVersion = '3.7.0'
     glideVersion = '4.12.0'
     navigationVersion = '2.3.5'
-    pagingVersion = '3.0.0-rc01'
+    pagingVersion = '3.0.0'
 
     //Core
-    koinVersion = '2.2.2'
-    coroutinesVersion = '1.4.3'
+    koinVersion = '3.0.1'
+    coroutinesVersion = '1.5.0-RC-native-mt'
     lifecycleVersion = '2.3.1'
     retrofitVersion = '2.9.0'
     okhttpVersion = '4.9.0'
@@ -88,12 +88,12 @@ dependencies {
     androidTestImplementation "androidx.test:rules:$androidXTestVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$idleResourceVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation 'org.mockito:mockito-inline:3.6.0'
+    testImplementation 'org.mockito:mockito-inline:3.9.0'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
     // Koin testing tools
-    testImplementation "org.koin:koin-test:$koinVersion"
+    testImplementation "io.insert-koin:koin-test:$koinVersion"
 
     // Shimmer effect
     implementation "com.facebook.shimmer:shimmer:$shimmerVersion"
@@ -106,10 +106,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     //koin
-    implementation "org.koin:koin-core:$koinVersion"
-    implementation "org.koin:koin-android:$koinVersion"
-    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
-    implementation "org.koin:koin-androidx-ext:$koinVersion"
+    implementation "io.insert-koin:koin-core:$koinVersion"
+    implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-android-ext:$koinVersion"
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
