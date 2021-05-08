@@ -7,11 +7,13 @@ import com.rasyidin.myfilmlist.di.useCaseModule
 import com.rasyidin.myfilmlist.di.viewModelModule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
+@ObsoleteCoroutinesApi
 @FlowPreview
 class MyApplication : Application() {
     @ExperimentalCoroutinesApi

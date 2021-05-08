@@ -24,9 +24,11 @@ import com.rasyidin.myfilmlist.ui.feature.detail.DetailActivity.Companion.MOVIE_
 import com.rasyidin.myfilmlist.ui.helper.Constants.ANIMATION_DURATION_TWO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SearchMovieFragment :
@@ -39,21 +41,24 @@ class SearchMovieFragment :
 
     private lateinit var bounds: ChangeBounds
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val animation = TransitionInflater.from(activity).inflateTransition(
+            android.R.transition.move
+        )
+        sharedElementEnterTransition = animation
+        sharedElementEnterTransition = enterTransition()
+
+        sharedElementReturnTransition = animation
+        sharedElementReturnTransition = returnTransition()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             val navBar =
                 (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             navBar.visibility = View.GONE
-
-            val animation = TransitionInflater.from(activity).inflateTransition(
-                android.R.transition.move
-            )
-            sharedElementEnterTransition = animation
-            sharedElementEnterTransition = enterTransition()
-
-            sharedElementReturnTransition = animation
-            sharedElementReturnTransition = returnTransition()
 
             setupRecyclerView()
 

@@ -8,10 +8,12 @@ import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.ITvShowUseCase
 import com.rasyidin.myfilmlist.ui.helper.Constants.DEBOUNCE_DURATION
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
+@ObsoleteCoroutinesApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SearchViewModel(movieUseCase: IMoviesUseCase, tvShowUseCase: ITvShowUseCase) : ViewModel() {
