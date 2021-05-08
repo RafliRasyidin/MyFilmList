@@ -41,23 +41,22 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
     private lateinit var bounds: ChangeBounds
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val animation = TransitionInflater.from(activity).inflateTransition(
+            android.R.transition.move
+        )
+
+        sharedElementEnterTransition = animation
+        sharedElementEnterTransition = enterTransition()
+
+        sharedElementReturnTransition = animation
+        sharedElementReturnTransition = returnTransition()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val navBar =
-                (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-            navBar.visibility = View.VISIBLE
-
-            val animation = TransitionInflater.from(activity).inflateTransition(
-                android.R.transition.move
-            )
-
-            sharedElementEnterTransition = animation
-            sharedElementEnterTransition = enterTransition()
-
-            sharedElementReturnTransition = animation
-            sharedElementReturnTransition = returnTransition()
-
             setupBottomSheet()
 
             setupAiringTodayAdapter()
@@ -71,6 +70,13 @@ class TvShowFragment : BaseFragment<FragmentTvShowBinding>(FragmentTvShowBinding
 
             navigateToSearchTvShow()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val navBar =
+            (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        navBar.visibility = View.VISIBLE
     }
 
     private fun enterTransition(): Transition {

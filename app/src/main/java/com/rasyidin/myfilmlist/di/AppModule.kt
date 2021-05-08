@@ -10,6 +10,7 @@ import com.rasyidin.myfilmlist.ui.feature.search.SearchViewModel
 import com.rasyidin.myfilmlist.ui.feature.tvshow.TvShowViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,6 +19,7 @@ val useCaseModule = module {
     factory<ITvShowUseCase> { TvShowInteractors(get()) }
 }
 
+@ObsoleteCoroutinesApi
 @ExperimentalCoroutinesApi
 @FlowPreview
 val viewModelModule = module {

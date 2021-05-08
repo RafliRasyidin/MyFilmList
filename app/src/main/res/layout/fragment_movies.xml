@@ -11,19 +11,16 @@
         android:layout_height="300dp"
         style="@style/Theme.MyFilmList.AppBarOverlay"
         android:background="@color/colorPrimaryVariant"
-        android:fitsSystemWindows="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-        
+        android:fitsSystemWindows="true">
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary">
-            
+
             <include
                 android:id="@+id/dashboard_container"
-                layout="@layout/dashboard_container"/>
+                layout="@layout/dashboard_container" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
             
     </com.google.android.material.appbar.AppBarLayout>
