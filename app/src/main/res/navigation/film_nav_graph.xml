@@ -40,12 +40,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.rasyidin.myfilmlist.ui.feature.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
-
-    <fragment
         android:id="@+id/tvShowFragment"
         android:name="com.rasyidin.myfilmlist.ui.feature.tvshow.TvShowFragment"
         android:label="fragment_tv_show"
