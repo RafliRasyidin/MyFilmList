@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -106,16 +105,4 @@ class MoviesViewModelTest {
         verify(observer).onChanged(movies)
     }
 
-    @Test
-    fun nowPlayingIsNull() {
-        Dispatchers.setMain(mainThreadSurrogate)
-        val emptyMovies = Resource.Success<List<Movie>>(emptyList())
-        val emptyList = flow {
-            emit(emptyMovies)
-        }
-        `when`(moviesUseCase.getNowPlaying()).thenReturn(emptyList)
-        val movie = viewModel.getNowPlaying.getValueOrAwait()
-        verify(moviesUseCase).getNowPlaying()
-        assertNull(movie.data)
-    }
 }

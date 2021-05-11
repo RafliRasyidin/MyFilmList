@@ -6,7 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.rasyidin.myfilmlist.R
-import com.rasyidin.myfilmlist.ui.feature.favorite.FavMoviesTvShowFragment
+import com.rasyidin.myfilmlist.ui.feature.favorite.FavMoviesFragment
+import com.rasyidin.myfilmlist.ui.feature.favorite.FavTvShowFragment
 
 class SectionPagerAdapter(
     fragmentManager: FragmentManager,
@@ -25,10 +26,8 @@ class SectionPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> FavMoviesTvShowFragment.newInstance(
-                position
-            )
-            else -> Fragment()
+            0 -> FavMoviesFragment()
+            else -> FavTvShowFragment()
         }
     }
 }

@@ -34,7 +34,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
 
     private lateinit var behavior: BottomSheetBehavior<*>
 
-    private var movie: Movie? = null
+    private var isFavorite = false
 
     override fun getViewBinding() = ActivityDetailBinding.inflate(layoutInflater)
 
@@ -60,8 +60,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
 
         onBackClicked()
 
-        onFavoriteClicked()
-
     }
 
     private fun setupRecyclerView() = binding.detailContainer.rvCast.apply {
@@ -75,13 +73,46 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
         setHasFixedSize(true)
     }
 
+    private fun onFavClicked(movie: Movie) {
+        binding.toolbar.imgFavorite.setOnClickListener {
+            favoriteState(!isFavorite)
+            if (isFavorite) {
+                viewModel.removeFav(movie)
+                Snackbar.make(binding.root, R.string.unfavorited, Snackbar.LENGTH_SHORT).show()
+            } else {
+                viewModel.setFav(movie)
+                Snackbar.make(binding.root, R.string.favorited, Snackbar.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    private fun onFavClicked(tvShow: TvShow) {
+        binding.toolbar.imgFavorite.setOnClickListener {
+            favoriteState(!isFavorite)
+            if (isFavorite) {
+                viewModel.removeFav(tvShow)
+                Snackbar.make(binding.root, R.string.unfavorited, Snackbar.LENGTH_SHORT).show()
+            } else {
+                viewModel.setFav(tvShow)
+                Snackbar.make(binding.root, R.string.favorited, Snackbar.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
     private fun observeDetailMovie() {
+        viewModel.checkFavMovie(args.movieId).observe(this) {
+            isFavorite = it
+            favoriteState(isFavorite)
+        }
         viewModel.getDetailMovie(args.movieId).observe(this) { resource ->
             when (resource) {
                 is Resource.Success -> {
                     binding.detailContainer.loading.visibility = View.GONE
-                    resource.data?.let {
-                        showDetailMovie(it)
+                    resource.data?.let { movie ->
+                        showDetailMovie(movie)
+                        onFavClicked(movie)
                     }
                 }
                 is Resource.Loading -> {
@@ -96,6 +127,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
                     ).show()
                 }
             }
+
         }
         viewModel.getCreditsMovie(args.movieId).observe(this) { resource ->
             when (resource) {
@@ -119,12 +151,17 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     }
 
     private fun observeDetailTvShow() {
+        viewModel.checkFavTvShow(args.tvShowId).observe(this) { state ->
+            isFavorite = state
+            favoriteState(isFavorite)
+        }
         viewModel.getDetailTvShow(args.tvShowId).observe(this) { resource ->
             when (resource) {
                 is Resource.Success -> {
                     binding.detailContainer.loading.visibility = View.GONE
-                    resource.data?.let {
-                        showDetailTvShow(it)
+                    resource.data?.let { tvShow ->
+                        showDetailTvShow(tvShow)
+                        onFavClicked(tvShow)
                     }
                 }
                 is Resource.Loading -> {
@@ -159,6 +196,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
                 }
             }
         }
+
     }
 
     private fun showDetailTvShow(tvShow: TvShow) {
@@ -233,21 +271,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
         }
     }
 
-    private fun onFavoriteClicked() {
-        viewModel.isFavorited(args.movieId).observe(this) { state ->
-            binding.toolbar.imgFavorite.setOnClickListener {
-                if (!state) {
-                    //viewModel.setFav(args)
-                    Snackbar.make(binding.root, R.string.favorited, Snackbar.LENGTH_SHORT).show()
-                } else {
-                    Snackbar.make(binding.root, R.string.unfavorited, Snackbar.LENGTH_SHORT).show()
-                }
-                favoriteState(state, binding.toolbar.imgFavorite)
-            }
-        }
-    }
-
-    private fun favoriteState(state: Boolean, image: ImageView) {
+    private fun favoriteState(state: Boolean, image: ImageView = binding.toolbar.imgFavorite) {
         image.apply {
             if (state) {
                 setImageDrawable(

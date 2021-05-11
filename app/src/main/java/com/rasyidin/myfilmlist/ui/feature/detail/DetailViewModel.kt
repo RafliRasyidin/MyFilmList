@@ -47,5 +47,7 @@ class DetailViewModel(
         }
     }
 
-    fun isFavorited(id: Int) = tvShowUseCase.isFavorited(id).asLiveData()
+    fun checkFavTvShow(id: Int) = tvShowUseCase.isFavorited(id).asLiveData()
+
+    fun checkFavMovie(id: Int) = movieUseCase.isFavorited(id).asLiveData()
 }
