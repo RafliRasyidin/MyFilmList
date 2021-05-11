@@ -1,5 +1,7 @@
 package com.rasyidin.myfilmlist.core.domain.usecase.movies
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.model.Person
@@ -34,5 +36,21 @@ class MoviesInteractors(private val moviesRepository: IMoviesRepository): IMovie
 
     override fun getCreditMovie(movieId: Int): Flow<Resource<List<Person>>> {
         return moviesRepository.getCreditsMovie(movieId)
+    }
+
+    override fun getFavMovies(): LiveData<PagedList<Movie>> {
+        return moviesRepository.getFavMovies()
+    }
+
+    override suspend fun setFavMovie(movie: Movie) {
+        return moviesRepository.setFavMovie(movie)
+    }
+
+    override suspend fun removeFavMovie(movie: Movie) {
+        return moviesRepository.removeFavMovie(movie)
+    }
+
+    override fun isFavorited(id: Int): Flow<Boolean> {
+        return moviesRepository.isFavorited(id)
     }
 }

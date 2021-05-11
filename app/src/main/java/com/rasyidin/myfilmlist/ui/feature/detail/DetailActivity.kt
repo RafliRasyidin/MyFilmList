@@ -34,6 +34,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
 
     private lateinit var behavior: BottomSheetBehavior<*>
 
+    private var movie: Movie? = null
+
     override fun getViewBinding() = ActivityDetailBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -232,14 +234,16 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     }
 
     private fun onFavoriteClicked() {
-        binding.toolbar.imgFavorite.setOnClickListener {
-            val state = true
-            if (state) {
-                Snackbar.make(binding.root, R.string.favorited, Snackbar.LENGTH_SHORT).show()
-            } else {
-                Snackbar.make(binding.root, R.string.unfavorited, Snackbar.LENGTH_SHORT).show()
+        viewModel.isFavorited(args.movieId).observe(this) { state ->
+            binding.toolbar.imgFavorite.setOnClickListener {
+                if (!state) {
+                    //viewModel.setFav(args)
+                    Snackbar.make(binding.root, R.string.favorited, Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(binding.root, R.string.unfavorited, Snackbar.LENGTH_SHORT).show()
+                }
+                favoriteState(state, binding.toolbar.imgFavorite)
             }
-            favoriteState(state, binding.toolbar.imgFavorite)
         }
     }
 

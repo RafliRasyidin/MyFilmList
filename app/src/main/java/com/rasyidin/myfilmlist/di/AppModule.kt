@@ -5,6 +5,7 @@ import com.rasyidin.myfilmlist.core.domain.usecase.movies.MoviesInteractors
 import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.ITvShowUseCase
 import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.TvShowInteractors
 import com.rasyidin.myfilmlist.ui.feature.detail.DetailViewModel
+import com.rasyidin.myfilmlist.ui.feature.favorite.FavoriteViewModel
 import com.rasyidin.myfilmlist.ui.feature.home.MoviesViewModel
 import com.rasyidin.myfilmlist.ui.feature.search.SearchViewModel
 import com.rasyidin.myfilmlist.ui.feature.tvshow.TvShowViewModel
@@ -27,4 +28,5 @@ val viewModelModule = module {
     viewModel { TvShowViewModel(get()) }
     viewModel { DetailViewModel(get(), get()) }
     viewModel { SearchViewModel(get(), get()) }
+    viewModel { FavoriteViewModel(get(), get()) }
 }

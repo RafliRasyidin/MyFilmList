@@ -1,5 +1,7 @@
 package com.rasyidin.myfilmlist.core.utils
 
+import com.rasyidin.myfilmlist.core.data.source.local.entity.MovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.TvShowEntity
 import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
@@ -31,6 +33,36 @@ fun TvItemsResponse.toTvShow() = TvShow(
     popularity = this.popularity,
     posterPath = this.posterPath,
     voteCount = this.voteCount,
+    voteAverage = this.voteAverage
+)
+
+fun MovieEntity.toMovie() = Movie(
+    id = this.id,
+    title = this.title,
+    posterPath = this.posterPath,
+    voteAverage = this.voteAverage,
+    genres = emptyList()
+)
+
+fun TvShowEntity.toTvShow() = TvShow(
+    id = this.id,
+    name = this.name,
+    posterPath = this.posterPath,
+    voteAverage = this.voteAverage,
+    genres = emptyList()
+)
+
+fun TvShow.toTvShowEntity() = TvShowEntity(
+    id = this.id,
+    name = this.name,
+    posterPath = this.posterPath,
+    voteAverage = this.voteAverage
+)
+
+fun Movie.toMovieEntity() = MovieEntity(
+    id = this.id,
+    title = this.title,
+    posterPath = this.posterPath,
     voteAverage = this.voteAverage
 )
 

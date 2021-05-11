@@ -1,5 +1,7 @@
 package com.rasyidin.myfilmlist.core.domain.usecase.tvshow
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
@@ -34,5 +36,21 @@ class TvShowInteractors(private val tvShowRepository: ITvShowRepository): ITvSho
 
     override fun getCreditsTvShow(tvId: Int): Flow<Resource<List<Person>>> {
         return tvShowRepository.getCreditsTvShow(tvId)
+    }
+
+    override fun getFavTvShow(): LiveData<PagedList<TvShow>> {
+        return tvShowRepository.getFavTvShow()
+    }
+
+    override suspend fun setFavTvShow(tvShow: TvShow) {
+        return tvShowRepository.setFavTvShow(tvShow)
+    }
+
+    override suspend fun removeFavTvShow(tvShow: TvShow) {
+        return tvShowRepository.removeFavTvShow(tvShow)
+    }
+
+    override fun isFavorited(id: Int): Flow<Boolean> {
+        return tvShowRepository.isFavorited(id)
     }
 }

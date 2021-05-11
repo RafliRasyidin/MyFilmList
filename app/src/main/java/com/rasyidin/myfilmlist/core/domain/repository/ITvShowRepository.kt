@@ -1,5 +1,7 @@
 package com.rasyidin.myfilmlist.core.domain.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
@@ -20,4 +22,12 @@ interface ITvShowRepository {
     fun getDetail(tvId: Int): Flow<Resource<TvShow>>
 
     fun getCreditsTvShow(tvId: Int): Flow<Resource<List<Person>>>
+
+    fun getFavTvShow(): LiveData<PagedList<TvShow>>
+
+    suspend fun setFavTvShow(tvShow: TvShow)
+
+    suspend fun removeFavTvShow(tvShow: TvShow)
+
+    fun isFavorited(id: Int): Flow<Boolean>
 }

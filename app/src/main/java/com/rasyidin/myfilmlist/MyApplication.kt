@@ -1,6 +1,7 @@
 package com.rasyidin.myfilmlist
 
 import android.app.Application
+import com.rasyidin.myfilmlist.core.di.databaseModule
 import com.rasyidin.myfilmlist.core.di.networkModule
 import com.rasyidin.myfilmlist.core.di.repositoryModule
 import com.rasyidin.myfilmlist.di.useCaseModule
@@ -27,7 +28,8 @@ class MyApplication : Application() {
                     repositoryModule,
                     networkModule,
                     useCaseModule,
-                    viewModelModule
+                    viewModelModule,
+                    databaseModule
                 )
             )
         }
