@@ -1,6 +1,7 @@
 package com.rasyidin.myfilmlist.ui.feature.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.rasyidin.myfilmlist.core.data.Resource
@@ -8,11 +9,10 @@ import com.rasyidin.myfilmlist.core.domain.usecase.movies.IMoviesUseCase
 import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.ITvShowUseCase
 import com.rasyidin.myfilmlist.utils.DataDummy
 import com.rasyidin.myfilmlist.utils.getValueOrAwait
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -45,6 +45,9 @@ class DetailViewModelTest {
 
     private var movieId: Int? = null
     private var tvShowId: Int? = null
+
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
     fun setUp() {
@@ -98,4 +101,50 @@ class DetailViewModelTest {
             assertNotNull(tvShow.data)
         }
     }
+
+    @Test
+    fun setFavMovie() {
+        testScope.launch {
+            val detailMovie = DataDummy.generateDummyDetailMovie()
+            doNothing().`when`(movieUseCase).setFavMovie(detailMovie)
+            movieUseCase.setFavMovie(detailMovie)
+
+            verify(movieUseCase).setFavMovie(detailMovie)
+        }
+    }
+
+    @Test
+    fun setFavTvShow() {
+        testScope.launch {
+            val detailTvShow = DataDummy.generateDummyDetailTv()
+            doNothing().`when`(tvUseCase).setFavTvShow(detailTvShow)
+            tvUseCase.setFavTvShow(detailTvShow)
+
+            verify(tvUseCase).setFavTvShow(detailTvShow)
+        }
+    }
+
+    @Test
+    fun removeFavMovie() {
+        testScope.launch {
+            val detailMovie = DataDummy.generateDummyDetailMovie()
+            doNothing().`when`(movieUseCase).removeFavMovie(detailMovie)
+            movieUseCase.removeFavMovie(detailMovie)
+
+            verify(movieUseCase).removeFavMovie(detailMovie)
+        }
+    }
+
+    @Test
+    fun removeFavTvShow() {
+        testScope.launch {
+            val detailTvShow = DataDummy.generateDummyDetailTv()
+            doNothing().`when`(tvUseCase).setFavTvShow(detailTvShow)
+            tvUseCase.setFavTvShow(detailTvShow)
+
+            verify(tvUseCase).setFavTvShow(detailTvShow)
+        }
+    }
+
+
 }
