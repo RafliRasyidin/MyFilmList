@@ -7,7 +7,7 @@
     tools:context=".ui.feature.favorite.FavMoviesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_fav"
+        android:id="@+id/rv_fav_tv_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"

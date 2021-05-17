@@ -54,16 +54,16 @@ class FavTvShowFragment :
         viewModel.getFavTvShow().observe(viewLifecycleOwner) { data ->
             if (data.isNullOrEmpty()) {
                 binding.lottieNoData.visibility = View.VISIBLE
-                binding.rvFav.visibility = View.GONE
+                binding.rvFavTvShow.visibility = View.GONE
             } else {
                 binding.lottieNoData.visibility = View.GONE
-                binding.rvFav.visibility = View.VISIBLE
+                binding.rvFavTvShow.visibility = View.VISIBLE
                 favAdapter.submitList(data)
             }
         }
     }
 
-    private fun setupRecyclerView() = binding.rvFav.apply {
+    private fun setupRecyclerView() = binding.rvFavTvShow.apply {
         adapter = favAdapter
         layoutManager = GridLayoutManager(activity, 3)
         setHasFixedSize(true)
