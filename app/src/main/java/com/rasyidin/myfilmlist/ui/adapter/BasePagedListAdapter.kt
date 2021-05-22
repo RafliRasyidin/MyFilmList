@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rasyidin.myfilmlist.R
 
 abstract class BasePagedListAdapter<T>(
-    val onClick: ((T) -> Unit)?,
+    private val onClick: ((T) -> Unit)?,
+    private val layoutId: Int,
     diffUtil: DiffUtil.ItemCallback<T>
 ) : PagedListAdapter<T, BasePagedListAdapter<T>.ViewHolder>(diffUtil) {
 
@@ -23,7 +24,7 @@ abstract class BasePagedListAdapter<T>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_film_potrait, parent, false)
+            LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
         )
     }
 

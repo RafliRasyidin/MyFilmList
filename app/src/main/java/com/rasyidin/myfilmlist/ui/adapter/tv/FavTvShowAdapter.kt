@@ -9,7 +9,7 @@ import com.rasyidin.myfilmlist.ui.adapter.BasePagedListAdapter
 import com.rasyidin.myfilmlist.ui.helper.loadImage
 
 class FavTvShowAdapter(onClick: (TvShow) -> Unit) :
-    BasePagedListAdapter<TvShow>(onClick, diffCallback) {
+    BasePagedListAdapter<TvShow>(onClick, R.layout.item_film_potrait, diffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tvShow = getItem(position)

@@ -9,7 +9,7 @@ import com.rasyidin.myfilmlist.ui.adapter.BasePagedListAdapter
 import com.rasyidin.myfilmlist.ui.helper.loadImage
 
 class FavMoviesAdapter(onClick: (Movie) -> Unit) :
-    BasePagedListAdapter<Movie>(onClick, diffCallback) {
+    BasePagedListAdapter<Movie>(onClick, R.layout.item_film_potrait, diffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = getItem(position)
