@@ -9,6 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface ITvShowUseCase {
 
+    /*fun getAllAiringToday(): Flow<Resource<PagedList<TvShow>>>
+
+    fun getAllOnTheAir(): Flow<Resource<PagedList<TvShow>>>
+
+    fun getAllTopRated(): Flow<Resource<PagedList<TvShow>>>
+
+    fun getAllPopular(): Flow<Resource<PagedList<TvShow>>>*/
+
     fun getAiringToday(): Flow<Resource<List<TvShow>>>
 
     fun getOnTheAir(): Flow<Resource<List<TvShow>>>

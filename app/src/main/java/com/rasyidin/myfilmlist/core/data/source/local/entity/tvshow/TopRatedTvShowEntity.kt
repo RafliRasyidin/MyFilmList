@@ -1,11 +1,11 @@
-package com.rasyidin.myfilmlist.core.data.source.local.entity
+package com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "fav_tv_show")
-data class TvShowEntity(
+@Entity(tableName = "top_rated_tv_show")
+data class TopRatedTvShowEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int = 0,

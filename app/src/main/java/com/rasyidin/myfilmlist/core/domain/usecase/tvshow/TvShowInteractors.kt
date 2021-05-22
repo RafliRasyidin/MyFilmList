@@ -9,6 +9,21 @@ import com.rasyidin.myfilmlist.core.domain.repository.ITvShowRepository
 import kotlinx.coroutines.flow.Flow
 
 class TvShowInteractors(private val tvShowRepository: ITvShowRepository): ITvShowUseCase {
+    /*override fun getAllAiringToday(): Flow<Resource<PagedList<TvShow>>> {
+        return tvShowRepository.getAllAiringToday()
+    }
+
+    override fun getAllOnTheAir(): Flow<Resource<PagedList<TvShow>>> {
+        return tvShowRepository.getAllOnTheAir()
+    }
+
+    override fun getAllTopRated(): Flow<Resource<PagedList<TvShow>>> {
+        return tvShowRepository.getAllTopRated()
+    }
+
+    override fun getAllPopular(): Flow<Resource<PagedList<TvShow>>> {
+        return tvShowRepository.getAllPopular()
+    }*/
 
     override fun getAiringToday(): Flow<Resource<List<TvShow>>> {
         return tvShowRepository.getAiringToday()

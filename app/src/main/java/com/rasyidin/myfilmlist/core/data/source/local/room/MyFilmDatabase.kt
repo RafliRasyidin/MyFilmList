@@ -2,11 +2,22 @@ package com.rasyidin.myfilmlist.core.data.source.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.rasyidin.myfilmlist.core.data.source.local.entity.MovieEntity
-import com.rasyidin.myfilmlist.core.data.source.local.entity.TvShowEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.*
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.*
 
 @Database(
-    entities = [MovieEntity::class, TvShowEntity::class],
+    entities = [
+        FavMovieEntity::class,
+        NowPlayingMovieEntity::class,
+        PopularMovieEntity::class,
+        TopRatedMovieEntity::class,
+        UpComingMovieEntity::class,
+        FavTvShowEntity::class,
+        AiringTodayTvShowEntity::class,
+        OnTheAirTvShowEntity::class,
+        PopularTvShowEntity::class,
+        TopRatedTvShowEntity::class
+    ],
     version = 1,
     exportSchema = false
 )

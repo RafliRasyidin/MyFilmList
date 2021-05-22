@@ -3,6 +3,8 @@ package com.rasyidin.myfilmlist.core.data.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.room.withTransaction
+import com.rasyidin.myfilmlist.core.data.NetworkBoundResource
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.local.MovieLocalDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.MoviesRemoteDataSource
@@ -10,14 +12,10 @@ import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.repository.IMoviesRepository
-import com.rasyidin.myfilmlist.core.utils.toListMovie
-import com.rasyidin.myfilmlist.core.utils.toMovie
-import com.rasyidin.myfilmlist.core.utils.toMovieEntity
-import com.rasyidin.myfilmlist.core.utils.toPerson
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
+import com.rasyidin.myfilmlist.core.utils.*
+import com.rasyidin.myfilmlist.core.utils.Constants.TIME_DELAY
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 
 @Suppress("UNCHECKED_CAST")
 class MoviesRepository(
@@ -25,56 +23,135 @@ class MoviesRepository(
     private val localDataSource: MovieLocalDataSource
 ) : IMoviesRepository {
 
+    /*private val config = PagedList.Config.Builder()
+        .setEnablePlaceholders(true)
+        .setPageSize(LOAD_PER_PAGE)
+        .build()*/
+
+    /*override fun getAllNowPlaying(): Flow<Resource<PagedList<Movie>>> {
+        val dataSource = remoteDataSource.getAllNowPlaying().map { it.toMovie() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllPopular(): Flow<Resource<PagedList<Movie>>> {
+        val dataSource = remoteDataSource.getAllPopular().map { it.toMovie() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllTopRated(): Flow<Resource<PagedList<Movie>>> {
+        val dataSource = remoteDataSource.getAllTopRated().map { it.toMovie() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllUpComing(): Flow<Resource<PagedList<Movie>>> {
+        val dataSource = remoteDataSource.getAllUpComing().map { it.toMovie() }
+        return handleResource(dataSource)
+    }*/
+
     override fun getNowPlaying(): Flow<Resource<List<Movie>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getNowPlaying().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListMovie()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<Movie>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllNowPlayingMovie().map {
+                    it.toListMovie()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getNowPlaying()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllNowPlayingMovie()
+                    localDataSource.insertAll(movies.toNowPlayingEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<Movie>>>
+        ) as Flow<Resource<List<Movie>>>
     }
 
     override fun getPopular(): Flow<Resource<List<Movie>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getPopular().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListMovie()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<Movie>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllPopularMovie().map {
+                    it.toListMovie()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getPopular()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllPopularMovie()
+                    localDataSource.insertAll(movies.toPopularEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<Movie>>>
+        ) as Flow<Resource<List<Movie>>>
+
     }
 
     override fun getTopRated(): Flow<Resource<List<Movie>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getTopRated().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListMovie()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<Movie>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllTopRatedMovie().map {
+                    it.toListMovie()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getTopRated()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllTopRatedMovie()
+                    localDataSource.insertAll(movies.toTopRatedEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<Movie>>>
+        ) as Flow<Resource<List<Movie>>>
     }
 
     override fun getUpComing(): Flow<Resource<List<Movie>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getUpcoming().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListMovie()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<Movie>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllUpComingMovie().map {
+                    it.toListMovie()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getUpcoming()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllUpComingMovie()
+                    localDataSource.insertAll(movies.toUpComingEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<Movie>>>
+        ) as Flow<Resource<List<Movie>>>
+
     }
 
     override fun searchMovies(query: String?): Flow<Resource<List<Movie>>> {
@@ -144,5 +221,20 @@ class MoviesRepository(
     override fun isFavorited(id: Int): Flow<Boolean> {
         return localDataSource.isFavorited(id)
     }
+
+    /*private fun handleResource(
+        dataSource: DataSource.Factory<Int, Movie>
+    ) = flow {
+        IdlingResource.increment()
+        emit(Resource.Loading())
+        val pagedList = LivePagedListBuilder(dataSource, config).build()
+        pagedList.asFlow().collect { data ->
+            emit(Resource.Success(data))
+            IdlingResource.decrement()
+        }
+    }.catch { e ->
+        IdlingResource.decrement()
+        emit(Resource.Error(message = e.toString()))
+    }.flowOn(Dispatchers.IO)*/
 
 }

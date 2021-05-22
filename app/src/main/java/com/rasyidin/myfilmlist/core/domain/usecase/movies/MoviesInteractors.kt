@@ -9,6 +9,21 @@ import com.rasyidin.myfilmlist.core.domain.repository.IMoviesRepository
 import kotlinx.coroutines.flow.Flow
 
 class MoviesInteractors(private val moviesRepository: IMoviesRepository): IMoviesUseCase {
+    /*override fun getAllNowPlaying(): Flow<Resource<PagedList<Movie>>> {
+        return moviesRepository.getAllNowPlaying()
+    }
+
+    override fun getAllPopular(): Flow<Resource<PagedList<Movie>>> {
+        return moviesRepository.getAllPopular()
+    }
+
+    override fun getAllTopRated(): Flow<Resource<PagedList<Movie>>> {
+        return moviesRepository.getAllTopRated()
+    }
+
+    override fun getAllUpComing(): Flow<Resource<PagedList<Movie>>> {
+        return moviesRepository.getAllUpComing()
+    }*/
 
     override fun getNowPlaying(): Flow<Resource<List<Movie>>> {
         return moviesRepository.getNowPlaying()

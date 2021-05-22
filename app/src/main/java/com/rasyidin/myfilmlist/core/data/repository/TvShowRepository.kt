@@ -3,6 +3,8 @@ package com.rasyidin.myfilmlist.core.data.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.room.withTransaction
+import com.rasyidin.myfilmlist.core.data.NetworkBoundResource
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.local.TvLocalDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.TvShowRemoteDataSource
@@ -10,14 +12,10 @@ import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.domain.model.Person
 import com.rasyidin.myfilmlist.core.domain.model.TvShow
 import com.rasyidin.myfilmlist.core.domain.repository.ITvShowRepository
-import com.rasyidin.myfilmlist.core.utils.toListTvShow
-import com.rasyidin.myfilmlist.core.utils.toPerson
-import com.rasyidin.myfilmlist.core.utils.toTvShow
-import com.rasyidin.myfilmlist.core.utils.toTvShowEntity
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
+import com.rasyidin.myfilmlist.core.utils.*
+import com.rasyidin.myfilmlist.core.utils.Constants.TIME_DELAY
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 
 @Suppress("UNCHECKED_CAST")
 class TvShowRepository(
@@ -25,56 +23,133 @@ class TvShowRepository(
     private val localDataSource: TvLocalDataSource
 ) : ITvShowRepository {
 
+    /*private val config = PagedList.Config.Builder()
+        .setEnablePlaceholders(true)
+        .setPageSize(Constants.LOAD_PER_PAGE)
+        .build()
+
+    override fun getAllAiringToday(): Flow<Resource<PagedList<TvShow>>> {
+        val dataSource = remoteDataSource.getAllAiringToday().map { it.toTvShow() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllOnTheAir(): Flow<Resource<PagedList<TvShow>>> {
+        val dataSource = remoteDataSource.getAllOnTheAir().map { it.toTvShow() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllPopular(): Flow<Resource<PagedList<TvShow>>> {
+        val dataSource = remoteDataSource.getAllPopular().map { it.toTvShow() }
+        return handleResource(dataSource)
+    }
+
+    override fun getAllTopRated(): Flow<Resource<PagedList<TvShow>>> {
+        val dataSource = remoteDataSource.getAllTopRated().map { it.toTvShow() }
+        return handleResource(dataSource)
+    }*/
+
     override fun getAiringToday(): Flow<Resource<List<TvShow>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getAiringToday().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListTvShow()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<TvShow>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllAiringTodayTvShow().map {
+                    it.toListTvShow()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getAiringToday()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllAiringTodayTvShow()
+                    localDataSource.insertAll(movies.toAiringTodayEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<TvShow>>>
+        ) as Flow<Resource<List<TvShow>>>
     }
 
     override fun getOnTheAir(): Flow<Resource<List<TvShow>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getOnTheAir().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListTvShow()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<TvShow>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllOnTheAirTvShow().map {
+                    it.toListTvShow()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getOnTheAir()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllOnTheAirTvShow()
+                    localDataSource.insertAll(movies.toOnTheAirEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<TvShow>>>
+        ) as Flow<Resource<List<TvShow>>>
     }
 
     override fun getTopRated(): Flow<Resource<List<TvShow>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getTopRated().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListTvShow()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<TvShow>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllTopRatedTvShow().map {
+                    it.toListTvShow()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getTopRated()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllTopRatedTvShow()
+                    localDataSource.insertAll(movies.toTopRatedEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<TvShow>>>
+        ) as Flow<Resource<List<TvShow>>>
     }
 
     override fun getPopular(): Flow<Resource<List<TvShow>>> {
-        return flow {
-            emit(Resource.Loading())
-            remoteDataSource.getPopular().collect { response ->
-                when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toListTvShow()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<TvShow>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+        return NetworkBoundResource(
+            query = {
+                localDataSource.getAllPopularTvShow().map {
+                    it.toListTvShow()
                 }
+            },
+
+            fetch = {
+                delay(TIME_DELAY)
+                remoteDataSource.getPopular()
+            },
+
+            saveCallResult = { movies ->
+                localDataSource.filmDatabase.withTransaction {
+                    localDataSource.deleteAllPopularTvShow()
+                    localDataSource.insertAll(movies.toPopularEntity())
+                }
+            },
+
+            shouldFetch = { data ->
+                data.isEmpty()
             }
-        } as Flow<Resource<List<TvShow>>>
+        ) as Flow<Resource<List<TvShow>>>
     }
 
     override fun searchTvShow(query: String?): Flow<Resource<List<TvShow>>> {
@@ -144,5 +219,20 @@ class TvShowRepository(
     override fun isFavorited(id: Int): Flow<Boolean> {
         return localDataSource.isFavorited(id)
     }
+
+    /*private fun handleResource(
+        dataSource: DataSource.Factory<Int, TvShow>
+    ) = flow {
+        IdlingResource.increment()
+        emit(Resource.Loading())
+        val pagedList = LivePagedListBuilder(dataSource, config).build()
+        pagedList.asFlow().collect { data ->
+            emit(Resource.Success(data))
+            IdlingResource.decrement()
+        }
+    }.catch { e ->
+        IdlingResource.decrement()
+        emit(Resource.Error(message = e.toString()))
+    }.flowOn(Dispatchers.IO)*/
 
 }

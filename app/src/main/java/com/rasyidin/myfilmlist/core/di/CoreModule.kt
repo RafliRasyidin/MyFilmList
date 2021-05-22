@@ -15,6 +15,8 @@ import com.rasyidin.myfilmlist.core.domain.repository.IMoviesRepository
 import com.rasyidin.myfilmlist.core.domain.repository.ITvShowRepository
 import com.rasyidin.myfilmlist.core.utils.Constants.DATABASE_NAME
 import com.rasyidin.myfilmlist.core.utils.Constants.REQUEST_TIMEOUT
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -24,8 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val repositoryModule = module {
-    single { MoviesRemoteDataSource(get()) }
-    single { TvShowRemoteDataSource(get()) }
+    factory { CoroutineScope((Dispatchers.IO)) }
+    single { MoviesRemoteDataSource(get(), get()) }
+    single { TvShowRemoteDataSource(get(), get()) }
     single { MovieLocalDataSource(get()) }
     single { TvLocalDataSource(get()) }
     single<IMoviesRepository> { MoviesRepository(get(), get()) }

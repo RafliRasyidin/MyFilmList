@@ -9,7 +9,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface IMoviesUseCase {
 
-    fun getNowPlaying() : Flow<Resource<List<Movie>>>
+    /*fun getAllNowPlaying(): Flow<Resource<PagedList<Movie>>>
+
+    fun getAllPopular(): Flow<Resource<PagedList<Movie>>>
+
+    fun getAllTopRated(): Flow<Resource<PagedList<Movie>>>
+
+    fun getAllUpComing(): Flow<Resource<PagedList<Movie>>>*/
+
+    fun getNowPlaying(): Flow<Resource<List<Movie>>>
 
     fun getPopular(): Flow<Resource<List<Movie>>>
 
