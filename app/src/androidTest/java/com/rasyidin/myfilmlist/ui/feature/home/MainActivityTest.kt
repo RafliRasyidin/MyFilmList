@@ -92,6 +92,7 @@ class MainActivityTest {
         onView(withId(R.id.img_favorite)).perform(click())
         onView(withId(R.id.img_back)).perform(click())
         onView(withId(R.id.favoriteFragment)).perform(click())
+        onView(withId(R.id.rv_fav)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -104,27 +105,7 @@ class MainActivityTest {
         onView(withId(R.id.img_back)).perform(click())
         onView(withId(R.id.favoriteFragment)).perform(click())
         onView(withText("TV SHOW")).perform(click())
+        onView(withId(R.id.rv_fav_tv_show)).check(matches(isDisplayed()))
     }
 
-    @Test
-    fun setRemoveFavMovie() {
-        onView(withId(R.id.rv_popular)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())
-        )
-        onView(withId(R.id.img_favorite)).perform(click())
-        onView(withId(R.id.img_back)).perform(click())
-        onView(withId(R.id.favoriteFragment)).perform(click())
-    }
-
-    @Test
-    fun setRemoveFavTvShow() {
-        onView(withId(R.id.tvShowFragment)).perform(click())
-        onView(withId(R.id.rv_popular)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click())
-        )
-        onView(withId(R.id.img_favorite)).perform(click())
-        onView(withId(R.id.img_back)).perform(click())
-        onView(withId(R.id.favoriteFragment)).perform(click())
-        onView(withText("TV SHOW")).perform(click())
-    }
 }
