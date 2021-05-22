@@ -1,5 +1,13 @@
 package com.rasyidin.myfilmlist.utils
 
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.NowPlayingMovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.PopularMovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.TopRatedMovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.UpComingMovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.AiringTodayTvShowEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.OnTheAirTvShowEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.PopularTvShowEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.TopRatedTvShowEntity
 import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
@@ -289,6 +297,118 @@ fun List<Movie>.toListMovieItemResponse(): List<MovieItemsResponse> {
             voteCount = it.voteCount,
             voteAverage = it.voteAverage,
             runtime = it.runtime
+        )
+        movies.add(movie)
+    }
+    return movies
+}
+
+fun List<TvShow>.toListAiringTodayEntity(): List<AiringTodayTvShowEntity> {
+    val listTvShow = ArrayList<AiringTodayTvShowEntity>()
+    this.map {
+        val tvShow = AiringTodayTvShowEntity(
+            backdropPath = it.backdropPath,
+            id = it.id,
+            name = it.name,
+            voteAverage = it.voteAverage
+        )
+        listTvShow.add(tvShow)
+    }
+    return listTvShow
+}
+
+fun List<TvShow>.toListOnTheAirEntity(): List<OnTheAirTvShowEntity> {
+    val listTvShow = ArrayList<OnTheAirTvShowEntity>()
+    this.map {
+        val tvShow = OnTheAirTvShowEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            name = it.name,
+            voteAverage = it.voteAverage
+        )
+        listTvShow.add(tvShow)
+    }
+    return listTvShow
+}
+
+fun List<TvShow>.toListTopRatedTvShowEntity(): List<TopRatedTvShowEntity> {
+    val listTvShow = ArrayList<TopRatedTvShowEntity>()
+    this.map {
+        val tvShow = TopRatedTvShowEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            name = it.name,
+            voteAverage = it.voteAverage
+        )
+        listTvShow.add(tvShow)
+    }
+    return listTvShow
+}
+
+fun List<TvShow>.toListPopularTvShowEntity(): List<PopularTvShowEntity> {
+    val listTvShow = ArrayList<PopularTvShowEntity>()
+    this.map {
+        val tvShow = PopularTvShowEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            name = it.name,
+            voteAverage = it.voteAverage
+        )
+        listTvShow.add(tvShow)
+    }
+    return listTvShow
+}
+
+fun List<Movie>.toListNowPlayingMovieEntity(): List<NowPlayingMovieEntity> {
+    val movies = ArrayList<NowPlayingMovieEntity>()
+    this.map {
+        val movie = NowPlayingMovieEntity(
+            backdropPath = it.backdropPath,
+            id = it.id,
+            title = it.title,
+            voteAverage = it.voteAverage,
+        )
+        movies.add(movie)
+    }
+    return movies
+}
+
+fun List<Movie>.toListPopularMovieEntity(): List<PopularMovieEntity> {
+    val movies = ArrayList<PopularMovieEntity>()
+    this.map {
+        val movie = PopularMovieEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            title = it.title,
+            voteAverage = it.voteAverage,
+        )
+        movies.add(movie)
+    }
+    return movies
+}
+
+fun List<Movie>.toListTopRatedEntity(): List<TopRatedMovieEntity> {
+    val movies = ArrayList<TopRatedMovieEntity>()
+    this.map {
+        val movie = TopRatedMovieEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            title = it.title,
+            voteAverage = it.voteAverage,
+        )
+        movies.add(movie)
+    }
+    return movies
+}
+
+fun List<Movie>.toListUpComingEntity(): List<UpComingMovieEntity> {
+    val movies = ArrayList<UpComingMovieEntity>()
+    this.map {
+        val movie = UpComingMovieEntity(
+            posterPath = it.posterPath,
+            id = it.id,
+            title = it.title,
+            voteAverage = it.voteAverage,
         )
         movies.add(movie)
     }

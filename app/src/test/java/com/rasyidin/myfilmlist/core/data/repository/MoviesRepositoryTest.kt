@@ -6,17 +6,11 @@ import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.verify
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.local.MovieLocalDataSource
-import com.rasyidin.myfilmlist.core.data.source.local.entity.MovieEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.movie.FavMovieEntity
 import com.rasyidin.myfilmlist.core.data.source.remote.MoviesRemoteDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
-import com.rasyidin.myfilmlist.core.data.source.remote.response.BaseResponse
-import com.rasyidin.myfilmlist.core.data.source.remote.response.movies.MovieItemsResponse
 import com.rasyidin.myfilmlist.core.utils.toMovieEntity
-import com.rasyidin.myfilmlist.utils.DataDummy
-import com.rasyidin.myfilmlist.utils.PagedListUtil
-import com.rasyidin.myfilmlist.utils.toListMovieItemResponse
-import com.rasyidin.myfilmlist.utils.toMovieItemsResponse
-import kotlinx.coroutines.Dispatchers
+import com.rasyidin.myfilmlist.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -46,102 +40,100 @@ class MoviesRepositoryTest {
 
     private var movieId: Int = 0
 
-    private lateinit var dummyMovies: BaseResponse<MovieItemsResponse>
-
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
     fun setup() {
-        dummyMovies = BaseResponse(
-            data = DataDummy.generateDummyMovies().toListMovieItemResponse(),
-            page = 1
-        )
         movieId = DataDummy.generateDummyDetailMovie().id
         moviesRepository = MoviesRepository(remote, local)
     }
 
     @Test
     fun getNowPlaying() {
-        testScope.launch {
-            `when`(remote.getNowPlaying()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getNowPlaying().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+        val dummyMovies = flow {
+            emit(DataDummy.generateDummyMovies().toListNowPlayingMovieEntity())
         }
+        `when`(local.getAllNowPlayingMovie()).thenReturn(dummyMovies)
 
+        testScope.launch {
+            val data = moviesRepository.getNowPlaying().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
+        }
     }
 
 
     @Test
     fun getPopular() {
+        val dummyMovies = flow {
+            emit(DataDummy.generateDummyMovies().toListPopularMovieEntity())
+        }
+        `when`(local.getAllPopularMovie()).thenReturn(dummyMovies)
+
         testScope.launch {
-            `when`(remote.getPopular()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getPopular().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = moviesRepository.getPopular().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getTopRated() {
+        val dummyMovies = flow {
+            emit(DataDummy.generateDummyMovies().toListTopRatedEntity())
+        }
+        `when`(local.getAllTopRatedMovie()).thenReturn(dummyMovies)
+
         testScope.launch {
-            `when`(remote.getTopRated()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getTopRated().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = moviesRepository.getTopRated().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getUpComing() {
+        val dummyMovies = flow {
+            emit(DataDummy.generateDummyMovies().toListUpComingEntity())
+        }
+        `when`(local.getAllUpComingMovie()).thenReturn(dummyMovies)
         testScope.launch {
-            `when`(remote.getUpcoming()).thenReturn(responseHandle(dummyMovies))
-            moviesRepository.getUpComing().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = moviesRepository.getUpComing().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun searchMovies() {
         val query = "Avengers"
-        val dummySearchMovies = BaseResponse(
-            data = DataDummy.generateDummySearchMovies().toListMovieItemResponse(),
-            page = 1
-        )
+        val dummySearch = DataDummy.generateDummySearchMovies().toListMovieItemResponse()
+        val dummyResponse = MutableStateFlow(dummySearch)
+
         testScope.launch {
-            `when`(remote.searchMovie(query)).thenReturn(responseHandle(dummySearchMovies))
-            moviesRepository.searchMovies(query).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            `when`(remote.searchMovie(query)).thenReturn(dummyResponse.map {
+                ApiResponse.Success(it)
+            })
+            val data = moviesRepository.searchMovies(query).first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun `Search Result is Not Found`() {
         val query = "kajwhdkawhd"
-        val dummySearchMovies = BaseResponse(
-            1,
-            emptyList<MovieItemsResponse>()
-        )
+        val dummySearch = DataDummy.generateDummySearchMovies().toListMovieItemResponse()
+        val dummyResponse = MutableStateFlow(dummySearch)
+
         testScope.launch {
-            `when`(remote.searchMovie(query)).thenReturn(responseHandle(dummySearchMovies))
-            moviesRepository.searchMovies(query).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNull(resource.data)
-                }
-            }
+            `when`(remote.searchMovie(query)).thenReturn(dummyResponse.map {
+                ApiResponse.Success(it)
+            })
+            val data = moviesRepository.searchMovies(query).first().data
+            assertNull(data)
+            assertEquals(0, data?.size)
         }
     }
 
@@ -153,10 +145,8 @@ class MoviesRepositoryTest {
         testScope.launch {
             `when`(remote.getUpcoming()).thenReturn(movie)
             moviesRepository.getUpComing().collect { resource ->
-                if (resource is Resource.Error) {
-                    assertEquals("Something Wrong!", resource.message)
-                    assertNull(resource.data)
-                }
+                assertTrue(resource is Resource.Error)
+                assertEquals("Something Wrong!", resource.message)
             }
         }
     }
@@ -168,12 +158,9 @@ class MoviesRepositoryTest {
         }
         testScope.launch {
             `when`(remote.getDetail(movieId)).thenReturn(detail)
-            moviesRepository.getDetail(movieId).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                    assertEquals(movieId, resource.data?.id)
-                }
-            }
+            val data = moviesRepository.getDetail(movieId).first().data
+            assertNotNull(data)
+            assertEquals(movieId, data?.id)
         }
     }
 
@@ -184,18 +171,16 @@ class MoviesRepositoryTest {
         }
         testScope.launch {
             `when`(remote.getCreditsMovie(movieId)).thenReturn(credits)
-            moviesRepository.getCreditsMovie(movieId).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = moviesRepository.getCreditsMovie(movieId).first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getFavMovies() {
         val dataSource =
-            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, FavMovieEntity>
         `when`(local.getFavMovies()).thenReturn(dataSource)
 
         val movies = Resource.Success(PagedListUtil.mockPagedList(DataDummy.generateDummyMovies()))
@@ -237,18 +222,5 @@ class MoviesRepositoryTest {
             val data = moviesRepository.isFavorited(movieId)
             assertEquals(true, data.first())
         }
-    }
-
-    private fun responseHandle(response: BaseResponse<MovieItemsResponse>): Flow<ApiResponse<List<MovieItemsResponse>>> {
-        return flow {
-            val data = response.data
-            if (data.isNotEmpty()) {
-                emit(ApiResponse.Success(data))
-            } else {
-                emit(ApiResponse.Empty)
-            }
-        }.catch { e ->
-            emit(ApiResponse.Error(e.message.toString()))
-        }.flowOn(Dispatchers.IO)
     }
 }

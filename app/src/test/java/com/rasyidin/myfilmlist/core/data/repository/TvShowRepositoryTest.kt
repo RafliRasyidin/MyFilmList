@@ -6,16 +6,13 @@ import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.verify
 import com.rasyidin.myfilmlist.core.data.Resource
 import com.rasyidin.myfilmlist.core.data.source.local.TvLocalDataSource
-import com.rasyidin.myfilmlist.core.data.source.local.entity.TvShowEntity
+import com.rasyidin.myfilmlist.core.data.source.local.entity.tvshow.FavTvShowEntity
 import com.rasyidin.myfilmlist.core.data.source.remote.TvShowRemoteDataSource
 import com.rasyidin.myfilmlist.core.data.source.remote.network.ApiResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.BaseResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.tv.TvItemsResponse
 import com.rasyidin.myfilmlist.core.utils.toTvShowEntity
-import com.rasyidin.myfilmlist.utils.DataDummy
-import com.rasyidin.myfilmlist.utils.PagedListUtil
-import com.rasyidin.myfilmlist.utils.toListTvItemsResponse
-import com.rasyidin.myfilmlist.utils.toTvItemsResponse
+import com.rasyidin.myfilmlist.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -46,101 +43,92 @@ class TvShowRepositoryTest {
 
     private var tvId: Int = 0
 
-    private lateinit var dummyTvShow: BaseResponse<TvItemsResponse>
-
     private val testDispatcher = TestCoroutineDispatcher()
     private val testScope = TestCoroutineScope(testDispatcher)
 
     @Before
     fun setup() {
-        dummyTvShow = BaseResponse(
-            1,
-            DataDummy.generateDummyTvShow().toListTvItemsResponse()
-        )
         tvId = DataDummy.generateDummyDetailTv().id
         repository = TvShowRepository(remote, local)
     }
 
     @Test
     fun getAiringToday() {
+        val dummyTv = flow {
+            emit(DataDummy.generateDummyTvShow().toListAiringTodayEntity())
+        }
+        `when`(local.getAllAiringTodayTvShow()).thenReturn(dummyTv)
         testScope.launch {
-            `when`(remote.getAiringToday()).thenReturn(responseHandle(dummyTvShow))
-            repository.getAiringToday().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = repository.getAiringToday().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getOnTheAir() {
+        val dummyTv = flow {
+            emit(DataDummy.generateDummyTvShow().toListOnTheAirEntity())
+        }
         testScope.launch {
-            `when`(remote.getOnTheAir()).thenReturn(responseHandle(dummyTvShow))
-            repository.getOnTheAir().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            `when`(local.getAllOnTheAirTvShow()).thenReturn(dummyTv)
+            val data = repository.getAiringToday().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getTopRated() {
+        val dummyTv = flow {
+            emit(DataDummy.generateDummyTvShow().toListTopRatedTvShowEntity())
+        }
         testScope.launch {
-            `when`(remote.getTopRated()).thenReturn(responseHandle(dummyTvShow))
-            repository.getTopRated().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            `when`(local.getAllTopRatedTvShow()).thenReturn(dummyTv)
+            val data = repository.getTopRated().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getPopular() {
+        val dummyTv = flow {
+            emit(DataDummy.generateDummyTvShow().toListPopularTvShowEntity())
+        }
         testScope.launch {
-            `when`(remote.getPopular()).thenReturn(responseHandle(dummyTvShow))
-            repository.getPopular().collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            `when`(local.getAllPopularTvShow()).thenReturn(dummyTv)
+            val data = repository.getPopular().first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun searchTvShow() {
         val query = "Naruto"
-        val dummySearchTvShow = BaseResponse(
-            1,
-            DataDummy.generateDummySearchTvShow().toListTvItemsResponse()
-        )
+        val dummySearchTvShow = DataDummy.generateDummySearchTvShow().toListTvItemsResponse()
+        val dummyResponse = MutableStateFlow(dummySearchTvShow)
 
         testScope.launch {
-            `when`(remote.searchTvShow(query)).thenReturn(responseHandle(dummySearchTvShow))
-            repository.searchTvShow(query).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            `when`(remote.searchTvShow(query)).thenReturn(dummyResponse.map { ApiResponse.Success(it) })
+            val data = repository.searchTvShow(query).first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun `Search Result is Not Found`() {
         val query = "kajwhdkawhd"
-        val dummySearchTvShow = BaseResponse(
-            1,
-            emptyList<TvItemsResponse>()
-        )
+        val dummySearchTvShow = DataDummy.generateDummySearchTvShow().toListTvItemsResponse()
+        val dummyResponse = MutableStateFlow(dummySearchTvShow)
+
         testScope.launch {
-            `when`(remote.searchTvShow(query)).thenReturn(responseHandle(dummySearchTvShow))
-            repository.searchTvShow(query).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNull(resource.data)
-                }
-            }
+            `when`(remote.searchTvShow(query)).thenReturn(dummyResponse.map { ApiResponse.Success(it) })
+            val data = repository.searchTvShow(query).first().data
+            assertNull(data)
+            assertEquals(0, data?.size)
         }
     }
 
@@ -152,10 +140,8 @@ class TvShowRepositoryTest {
         testScope.launch {
             `when`(remote.getPopular()).thenReturn(tvShow)
             repository.getPopular().collect { resource ->
-                if (resource is Resource.Error) {
-                    assertEquals("Something Wrong!", resource.message)
-                    assertNull(resource.data)
-                }
+                assertTrue(resource is Resource.Error)
+                assertEquals("Something Wrong!", resource.message)
             }
         }
     }
@@ -167,12 +153,9 @@ class TvShowRepositoryTest {
         }
         testScope.launch {
             `when`(remote.getDetail(tvId)).thenReturn(dummyDetailTvShow)
-            repository.getDetail(tvId).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertEquals(tvId, resource.data?.id)
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = repository.getDetail(tvId).first().data
+            assertNotNull(data)
+            assertEquals(tvId, data?.id)
         }
     }
 
@@ -183,18 +166,16 @@ class TvShowRepositoryTest {
         }
         testScope.launch {
             `when`(remote.getCreditsTvShow(tvId)).thenReturn(credits)
-            repository.getCreditsTvShow(tvId).collect { resource ->
-                if (resource is Resource.Success) {
-                    assertNotNull(resource.data)
-                }
-            }
+            val data = repository.getCreditsTvShow(tvId).first().data
+            assertNotNull(data)
+            assertEquals(3, data?.size)
         }
     }
 
     @Test
     fun getFavTvShow() {
         val dataSource =
-            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
+            mock(DataSource.Factory::class.java) as DataSource.Factory<Int, FavTvShowEntity>
         `when`(local.getFavTvShow()).thenReturn(dataSource)
 
         val tvShow = Resource.Success(PagedListUtil.mockPagedList(DataDummy.generateDummyTvShow()))
