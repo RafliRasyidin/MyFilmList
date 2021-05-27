@@ -91,8 +91,6 @@ t
 Dapp/src/main/java/com/rasyidin/myfilmlist/core/domain/model/Movie.kt,d\8\d83aa21eef1b2d4e930fb5b524f15a11b0534e7f
 à
 Xapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/remote/network/ApiResponse.kt,7\f\7fda7cf99211f1adbed41d8c9893ffe89dfe2b83
-É
-Sapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/remote/ResponseHandle.kt,e\9\e93a2d5d5cbc62e6747e3dd098a83f041c23e8a3
 j
 :app/src/main/java/com/rasyidin/myfilmlist/MyApplication.kt,4\2\427fdb2ce624a45feba650bb7f607a3adb291ee2
 i
@@ -101,8 +99,6 @@ i
 Napp/src/main/java/com/rasyidin/myfilmlist/ui/feature/search/SearchViewModel.kt,7\7\77d16561f1535a78c379b4e18eada5b68a893072
 ~
 Napp/src/main/java/com/rasyidin/myfilmlist/ui/feature/detail/DetailViewModel.kt,0\d\0daa02d4b8dd0ba89862a4d58b3897f81246533d
-Ç
-Rapp/src/main/java/com/rasyidin/myfilmlist/ui/feature/search/SearchMovieFragment.kt,0\9\09d43695147291d75895708d8e28f6c1c53258a5
 {
 Kapp/src/main/java/com/rasyidin/myfilmlist/ui/feature/home/MoviesFragment.kt,6\1\61107b760c0d24fa35a1c5f72da4c789be086a2a
 Ä
@@ -115,8 +111,6 @@ p
 @app/src/main/java/com/rasyidin/myfilmlist/ui/helper/Constants.kt,6\d\6d973f6b776c98fe29f9180e5419d86af36171b8
 |
 Lapp/src/main/java/com/rasyidin/myfilmlist/ui/feature/home/MoviesViewModel.kt,4\2\427d05b812f7cb874af8501a31ee426d70a5218c
-Ä
-Papp/src/test/java/com/rasyidin/myfilmlist/ui/feature/home/MoviesViewModelTest.kt,8\2\82d9ade69f2f73db82c6019c3acca4b590c81529
 ~
 Napp/src/main/java/com/rasyidin/myfilmlist/ui/feature/tvshow/TvShowViewModel.kt,e\d\ed206c5f8bd273deebb8f86714eb6ee8f01b87b9
 è
@@ -145,14 +139,10 @@ Qapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/local/room/MovieDao.
 Wapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/local/room/MyFilmDatabase.kt,8\c\8ce7ae4282e9d54a508a061e858297b4297e174c
 Ç
 Rapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/local/room/TvShowDao.kt,0\5\05abb60c6e5ec48b675c3a29bdc3d5d00efd544c
-à
-Xapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/local/MovieLocalDataSource.kt,a\3\a33cd00e7ebe730f9c296699b4486de5f76223f1
 Ö
 Uapp/src/main/java/com/rasyidin/myfilmlist/core/data/source/local/TvLocalDataSource.kt,3\f\3f9c30c345822e8cbd6f7453a2d6e44120911f26
 å
 \app/src/main/java/com/rasyidin/myfilmlist/core/data/source/remote/paging/TvShowDataSource.kt,e\9\e9992c9110c5c215ec8e6ba9f88a76bbdf74e989
-{
-Kapp/src/main/java/com/rasyidin/myfilmlist/core/data/NetworkBoundResource.kt,a\b\ab335c587c7a2d76aa6f21fbb76be1a3322b9d1b
 o
 ?app/src/main/java/com/rasyidin/myfilmlist/core/di/CoreModule.kt,c\c\cce15fb7b4dc480eb7c5f0133a45ab3819e3999b
 Ö
@@ -183,3 +173,5 @@ Vapp/src/test/java/com/rasyidin/myfilmlist/core/data/repository/MoviesRepository
 Vapp/src/test/java/com/rasyidin/myfilmlist/core/data/repository/TvShowRepositoryTest.kt,9\c\9cd1185b19d1c0cec5a0b9ccf57211767c7fbad4
 l
 <app/src/test/java/com/rasyidin/myfilmlist/utils/DataDummy.kt,4\4\44256ee73b17bfd8e7feb1cb3426275101466f20
+ã
+[app/src/main/java/com/rasyidin/myfilmlist/core/data/source/remote/TvShowRemoteDataSource.kt,d\0\d0b76fc6dc84353153f6e39a98ea5e466990ae77

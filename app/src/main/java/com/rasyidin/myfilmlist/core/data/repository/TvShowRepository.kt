@@ -168,12 +168,22 @@ class TvShowRepository(
 
     override fun getDetail(tvId: Int): Flow<Resource<TvShow>> {
         return flow {
+            IdlingResource.increment()
             emit(Resource.Loading())
             remoteDataSource.getDetail(tvId).collect { response ->
                 when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toTvShow()))
-                    is ApiResponse.Empty -> emit(Resource.Success<TvShow>(null))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+                    is ApiResponse.Success -> {
+                        emit(Resource.Success(response.data.toTvShow()))
+                        IdlingResource.decrement()
+                    }
+                    is ApiResponse.Empty -> {
+                        emit(Resource.Success<TvShow>(null))
+                        IdlingResource.decrement()
+                    }
+                    is ApiResponse.Error -> {
+                        emit(Resource.Error(null, response.message))
+                        IdlingResource.decrement()
+                    }
                 }
             }
         } as Flow<Resource<TvShow>>
@@ -181,12 +191,22 @@ class TvShowRepository(
 
     override fun getCreditsTvShow(tvId: Int): Flow<Resource<List<Person>>> {
         return flow {
+            IdlingResource.increment()
             emit(Resource.Loading())
             remoteDataSource.getCreditsTvShow(tvId).collect { response ->
                 when (response) {
-                    is ApiResponse.Success -> emit(Resource.Success(response.data.toPerson()))
-                    is ApiResponse.Empty -> emit(Resource.Success<List<Person>>(emptyList()))
-                    is ApiResponse.Error -> emit(Resource.Error(null, response.message))
+                    is ApiResponse.Success -> {
+                        emit(Resource.Success(response.data.toPerson()))
+                        IdlingResource.decrement()
+                    }
+                    is ApiResponse.Empty -> {
+                        emit(Resource.Success<List<Person>>(emptyList()))
+                        IdlingResource.decrement()
+                    }
+                    is ApiResponse.Error -> {
+                        emit(Resource.Error(null, response.message))
+                        IdlingResource.decrement()
+                    }
                 }
             }
         } as Flow<Resource<List<Person>>>

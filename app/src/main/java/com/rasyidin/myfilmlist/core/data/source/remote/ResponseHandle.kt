@@ -6,7 +6,7 @@ import com.rasyidin.myfilmlist.core.data.source.remote.response.CastResponse
 import com.rasyidin.myfilmlist.core.data.source.remote.response.CreditsResponse
 import com.rasyidin.myfilmlist.core.utils.IdlingResource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -25,13 +25,12 @@ abstract class ResponseHandle<T> {
             val data = response.data
             if (data.isNotEmpty()) {
                 emit(ApiResponse.Success(data))
-                IdlingResource.decrement()
             } else {
                 emit(ApiResponse.Empty)
-                IdlingResource.decrement()
             }
         }.catch { e ->
             emit(ApiResponse.Error(e.message.toString()))
+        }.onCompletion {
             IdlingResource.decrement()
         }.flowOn(Dispatchers.IO)
     }
@@ -41,13 +40,12 @@ abstract class ResponseHandle<T> {
         return flow {
             if (!isIdEqualsToZero) {
                 emit(ApiResponse.Success(response))
-                IdlingResource.decrement()
             } else {
                 emit(ApiResponse.Empty)
-                IdlingResource.decrement()
             }
         }.catch { e ->
             emit(ApiResponse.Error(e.message.toString()))
+        }.onCompletion {
             IdlingResource.decrement()
         }.flowOn(Dispatchers.IO)
     }
@@ -58,13 +56,12 @@ abstract class ResponseHandle<T> {
             val data = response.data
             if (data.isNotEmpty()) {
                 emit(ApiResponse.Success(data))
-                IdlingResource.decrement()
             } else {
                 emit(ApiResponse.Empty)
-                IdlingResource.decrement()
             }
         }.catch { e ->
             emit(ApiResponse.Error(e.message.toString()))
+        }.onCompletion {
             IdlingResource.decrement()
         }.flowOn(Dispatchers.IO)
     }
