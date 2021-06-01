@@ -10,10 +10,6 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
-
-    def localProperties = new Properties()
-    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
     defaultConfig {
         applicationId "com.rasyidin.myfilmlist"
         minSdkVersion 21
@@ -22,9 +18,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_KEY", "\"" + localProperties['API_KEY'] + "\"")
-        buildConfigField("String", "BASE_URL", "\"" + localProperties['BASE_URL'] + "\"")
-        buildConfigField("String", "BASE_URL_IMAGE", "\"" + localProperties['BASE_URL_IMAGE'] + "\"")
+        buildConfigField("String", "API_KEY", '"4593d83a2aabb3d288adefd681c1ca00"')
+        buildConfigField("String", "BASE_URL", '"https://api.themoviedb.org/3/"')
+        buildConfigField("String", "BASE_URL_IMAGE", '"https://image.tmdb.org/t/p/w500"')
     }
 
     buildTypes {
@@ -56,7 +52,7 @@ ext {
 
     //Core
     koinVersion = '3.0.1'
-    coroutinesVersion = '1.5.0-RC-native-mt'
+    coroutinesVersion = '1.5.0'
     lifecycleVersion = '2.3.1'
     retrofitVersion = '2.9.0'
     okhttpVersion = '4.9.0'

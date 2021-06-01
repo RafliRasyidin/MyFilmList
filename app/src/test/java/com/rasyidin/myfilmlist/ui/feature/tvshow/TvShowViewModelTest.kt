@@ -9,11 +9,8 @@ import com.rasyidin.myfilmlist.core.domain.model.TvShow
 import com.rasyidin.myfilmlist.core.domain.usecase.tvshow.ITvShowUseCase
 import com.rasyidin.myfilmlist.utils.DataDummy
 import com.rasyidin.myfilmlist.utils.getValueOrAwait
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -69,40 +66,56 @@ class TvShowViewModelTest {
     @Test
     fun getGetAiringToday() {
         val listTvShow = viewModel.getAiringToday.getValueOrAwait()
-        verify(useCase).getAiringToday()
-        assertNotNull(listTvShow.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(useCase).getAiringToday()
+                assertNotNull(listTvShow.data)
 
-        viewModel.getAiringToday.observeForever(observer)
-        verify(observer).onChanged(listTvShow)
+                viewModel.getAiringToday.observeForever(observer)
+                verify(observer).onChanged(listTvShow)
+            }
+        }
     }
 
     @Test
     fun getGetOnTheAir() {
         val listTvShow = viewModel.getOnTheAir.getValueOrAwait()
-        verify(useCase).getOnTheAir()
-        assertNotNull(listTvShow.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(useCase).getOnTheAir()
+                assertNotNull(listTvShow.data)
 
-        viewModel.getOnTheAir.observeForever(observer)
-        verify(observer).onChanged(listTvShow)
+                viewModel.getOnTheAir.observeForever(observer)
+                verify(observer).onChanged(listTvShow)
+            }
+        }
     }
 
     @Test
     fun getGetTopRated() {
         val listTvShow = viewModel.getTopRated.getValueOrAwait()
-        verify(useCase).getTopRated()
-        assertNotNull(listTvShow.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(useCase).getTopRated()
+                assertNotNull(listTvShow.data)
 
-        viewModel.getTopRated.observeForever(observer)
-        verify(observer).onChanged(listTvShow)
+                viewModel.getTopRated.observeForever(observer)
+                verify(observer).onChanged(listTvShow)
+            }
+        }
     }
 
     @Test
     fun getGetPopular() {
         val listTvShow = viewModel.getPopular.getValueOrAwait()
-        verify(useCase).getPopular()
-        assertNotNull(listTvShow.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(useCase).getPopular()
+                assertNotNull(listTvShow.data)
 
-        viewModel.getPopular.observeForever(observer)
-        verify(observer).onChanged(listTvShow)
+                viewModel.getPopular.observeForever(observer)
+                verify(observer).onChanged(listTvShow)
+            }
+        }
     }
 }

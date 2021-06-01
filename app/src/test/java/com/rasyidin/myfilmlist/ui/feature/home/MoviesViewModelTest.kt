@@ -9,11 +9,8 @@ import com.rasyidin.myfilmlist.core.domain.model.Movie
 import com.rasyidin.myfilmlist.core.domain.usecase.movies.IMoviesUseCase
 import com.rasyidin.myfilmlist.utils.DataDummy
 import com.rasyidin.myfilmlist.utils.getValueOrAwait
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -59,50 +56,66 @@ class MoviesViewModelTest {
         viewModel = MoviesViewModel(moviesUseCase)
     }
 
-    @Test
-    fun getGetPopular() {
-        val listMovies = viewModel.getPopular.getValueOrAwait()
-        verify(moviesUseCase).getPopular()
-        assertNotNull(listMovies.data)
-
-        viewModel.getPopular.observeForever(observer)
-        verify(observer).onChanged(listMovies)
-    }
-
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
+    }
+
+    @Test
+    fun getGetPopular() {
+        val listMovies = viewModel.getPopular.getValueOrAwait()
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(moviesUseCase).getPopular()
+                assertNotNull(listMovies.data)
+
+                viewModel.getPopular.observeForever(observer)
+                verify(observer).onChanged(listMovies)
+            }
+        }
     }
 
     @Test
     fun getGetTopRated() {
         val movies = viewModel.getTopRated.getValueOrAwait()
-        verify(moviesUseCase).getTopRated()
-        assertNotNull(movies.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(moviesUseCase).getTopRated()
+                assertNotNull(movies.data)
 
-        viewModel.getTopRated.observeForever(observer)
-        verify(observer).onChanged(movies)
+                viewModel.getTopRated.observeForever(observer)
+                verify(observer).onChanged(movies)
+            }
+        }
+
     }
 
     @Test
     fun getGetNowPlaying() {
         val movies = viewModel.getNowPlaying.getValueOrAwait()
-        verify(moviesUseCase).getNowPlaying()
-        assertNotNull(movies.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(moviesUseCase).getNowPlaying()
+                assertNotNull(movies.data)
 
-        viewModel.getNowPlaying.observeForever(observer)
-        verify(observer).onChanged(movies)
+                viewModel.getNowPlaying.observeForever(observer)
+                verify(observer).onChanged(movies)
+            }
+        }
     }
 
     @Test
     fun getGetUpComing() {
         val movies = viewModel.getUpComing.getValueOrAwait()
-        verify(moviesUseCase).getUpComing()
-        assertNotNull(movies.data)
+        runBlocking {
+            launch(Dispatchers.Main) {
+                verify(moviesUseCase).getUpComing()
+                assertNotNull(movies.data)
 
-        viewModel.getUpComing.observeForever(observer)
-        verify(observer).onChanged(movies)
+                viewModel.getUpComing.observeForever(observer)
+                verify(observer).onChanged(movies)
+            }
+        }
     }
 
 }
